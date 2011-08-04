@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Node Pong</title>
+	<link media="all" type="text/css" rel="stylesheet" href="css.css">
+	<script type="text/javascript" src="js.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.js"></script>
+	<script src="http://cdn.socket.io/stable/socket.io.js"></script>
+</head>
+<script type="text/javascript">
+	
+</script>
+
+<body>
+<div id="all">
+    <div id="header">
+    	<h3>Node Pong</h3>
+    </div>
+    <canvas id="canvas"></canvas>
+	
+    <div id="users">
+    	<span id="p1"><a href="#" onclick="conect('p1')">Conect P1</a></span>
+ 
+    	<span id="p2"><a href="#" onclick="conect('p2')">Conect P2</a></span>
+
+    	<a id="start" href="#" onclick="msg('start');">start</a>
+    </div>
+</div>
+</body>
+</html>
