@@ -9,18 +9,16 @@ var server = http.createServer(function(req, res){
   res.end('<h1>Hello Socket Lover!</h1>');
 });
 
-// Define a porta de escuta do socket
+// Define socket port to listen 
 server.listen(1234);
 
-// Cria instância de socket.io passando o server criado
+// Instantiate socket.io using the created server
 var socket = io.listen(server);
 
-// variáveis representando os usuários
 var player1;
 var player2;
 
-// Evento sobre a conexão
-socket.on('connection', function(client){
+var onConnectionCallback = function(client){
 	
 	// Se não existe player 1, atribui o cliente ao player1 
 	if( !player1 ){
@@ -57,52 +55,57 @@ socket.on('connection', function(client){
 		client.send( {erro:'muitos usuarios'} );
 	}
  
-});
+}
+
+
+// Connection event
+socket.on('connection', onConnectionCallback); 
 
 /*
-* Função de envio de mensagens do player 1 para o player 2
-* author : Gustavo Pantuza
-* since	: 09.07.2011
-*/
+ * Player 1 send messages to player 2
+ * author : Gustavo Pantuza
+ * since	: 09.07.2011
+ */
 function msgFromPlayer1(msg){
 	
 	if(msg == "start"){
 		sendAll(msg);
 		return
 	}
-	// Envia mensagem para o player 2
+	// Send message to player 2
 	player2.send( msg );
 }
   
 /*
-* Função de envio de mensagens do player 2 para o player 1
-* author : Gustavo Pantuza
-* since	: 09.07.2011
-*/
+ * Player 2 send messages to player 1
+ * author : Gustavo Pantuza
+ * since	: 09.07.2011
+ */
 function msgFromPlayer2(msg){
 
 	if(msg == "start"){
 		sendAll(msg);
 		return
 	}
-	// Envia mensagem para o player 1
+	// Send message to player 1
 	player1.send( msg );
 }
+
 /*
- * Função de envio de mensagens do servidor para todos os clientes
+ * Broadcast message to all clients
  * author: Gustavo Pantuza
  * since: 09.07.2011
  */
-function sendAll( msg ){
-	player1.send( msg );
-	player2.send( msg );
+function sendAll(msg){
+    player1.send(msg);
+    player2.send(msg);
 }
-  
+
 /*
-* Função de notificação quando o usuário desconectar
-* author: Gustavo Pantuza
-* since : 09.07.2011
-*/
-function onDisconnect(){
+ * When user disconnects, it sends a notification
+ * author: Gustavo Pantuza
+ * since : 09.07.2011
+ */
+function onDisconnect() {
 	console.log('Server has disconnected');
 }
