@@ -1,13 +1,13 @@
-NODE-PONG
+## NODE-PONG
 
-NAME
-	node-pong
+### NAME
+> ###### node-pong
 	
-DESCRIPTION
+### DESCRIPTION
 
 	Classic ping-pong game using nodejs, socket.io, canvas and javaScript
 
-DEPENDENCIES
+### DEPENDENCIES
 
 	We do not recomend to get/install the dependencies from linux 
 	distributions repositories. Get it from the oficial project by
@@ -26,12 +26,12 @@ DEPENDENCIES
 				http://www.ecmascript.org
 
 
-AUTHOR
-	Written by Gustavo Pantuza and Fabrício Bedeschi
+### AUTHOR
+> ###### Written by Gustavo Pantuza and Fabrício Bedeschi
 
-REPORTING BUGS
+### REPORTING BUGS
 
-	Report node-pong bugs to gustavopantuza@gmail.com
+> ###### Report node-pong bugs to gustavopantuza@gmail.com
 
 --
  O/
