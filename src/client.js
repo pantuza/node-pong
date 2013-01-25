@@ -1,161 +1,158 @@
 
-// Representa o socket de conexão com o servidor
+
 var socket;
 
-// guarda o id do elemento html para definir player ('p1', 'p2')
-var player;
+// Defines which player ('p1', 'p2'). Stores the html element ID
+var playerElm;
 
-// objeto canvas
+// Canvas Element Object
 var canvasObj;
 
-// Controle se o jogo foi iniciado
+// Canvas Context
+var ctx;
+
+// Controls the game start
 var started = false;
 
-/* paleta da direita */
+/* right blade */
 var player1 = {
 	x : 0,
 	y : 0	
 }
 
-/* paleta da esquerda */
+/* left blade */
 var player2 = {
 	x : 0,
 	y : 0
 }
 
-/* Define o objeto que representa a bolinha */
+/* Ball object */
 var ball = {
-	// definições de posição inicial
+    // Position
 	x  : 0,
 	y  : 0,
 	
-	// definições da velocidade da bolinha (deslocamento a cada iteração)
+	// Displacement
 	dx : -8,
 	dy : 16,
 }
 
-// Contexto do elemento Canvas
-var ctx;
 
-// Largura e altura do elemento canvas
+// Canvas Dimensions
 var WIDTH; 
 var HEIGHT;
 
-//Largura e Altura das paletas (paddles)
+// Paddles Dimensions 
 var paddle_h = 40;
 var paddle_w = 3;
 
-// limites de movimento do mouse
+// Limits of mouse moviments
 var canvasMinX,
 	canvasMaxX,
 	canvasMinY,
 	canvasMaxY;
 
-// Identificador de controle para o setInterval
+// controls setInterval
 var intervalId = 0;
 
 /*
- * Função de inicialização do jogo. Constrói todos
- * os elementos necessários para a execução do jogo.
+ * Game initialization function. Construct all 
+ * game execution elements.
  * author: Gustavo Pantuza, Fabrício Bedeschi
  * since: 06.07.2011 
  */
 function init() {
-	
-	// Se o jogo já começou, não faz nada e sai da função 'init'
-	if (started){
-		return;
-	// Caso contrário inicia o jogo
-	}else {
-		// Define que o jogo está em execução
-		started = true;
-		
+	// Start the game
+	if (!started){
+
 		canvasObj = document.getElementById('canvas');
-		
-		// Busca o contexto do elemento canvas a ser trabalhado
+		// Get the canvas element 2D context 
 		ctx = canvasObj.getContext("2d");
 		window.ctx = ctx;
-		// seta as dimensões do bitmap do canvas
+		// Define the canvas bitmap dimensions 
 		canvasObj.setAttribute('width', 500);
 		canvasObj.setAttribute('height', 250);
 		
-		// Atribui as dimensões do objeto canvas de largura e altura
-		WIDTH  = canvasObj.width;
+		// Assign the canvas object dimensions to the program
+		WIDTH  = canvasObj.width;   
 		HEIGHT = canvasObj.height;
 		
-		//Posicionamento dos paddles sobre a abscissa: 5 px esquerta, -5 direita
+		// Put paddles on the abscissa: 5 px left, -5 px right
 		player1.x = WIDTH -5;
 		player2.x = 2;
-		// Posicionamento dos paddles sobre a ordenada: centralizado verticalmente
+		// Put paddles on the ordinate: vertically centralized
 		player1.y = player2.y = (HEIGHT /2)-(paddle_h/2);
 		
-		// Define os limites do canvas horizontalmente
+		// Define canvas limits horizontally
 		canvasMinX = $("#canvas").offset().left;
 		canvasMaxX = canvasMinX + WIDTH;
 		
-		// Posicao inicial da bolinha
+		// Initial position of the ball
 		ball.x = WIDTH /2;
 		ball.y = HEIGHT /2;
-		alert("to aqui ");
-		// Chama a função que trata os eventos sobre o mouse
+        //
+		// Define mouse moviments limits on the screen
 		init_mouse();
 		
-		// executa a função 'onMouseMove' a cada chamada do navegador ao evento 'mousemove'
+		// Bind mousemove event to the onMouseMove function
 		$(document).mousemove(onMouseMove);
 		
-		// Cria o intervalo de execução da função 'beforeDraw' em 150 milisegundos
+		// Create the beforeDraw function interval call
 		intervalId = setInterval(beforeDraw, 100);
 		
+		started = true;
 		return intervalId;
 	}
 }
 
 /*
- * Função de limpeza do canvas. É executada a cada 
- * iteração do algoritmo que redesenha o jogo.
+ * Canvas clear function. It is called on each 
+ * algorithm redraw iteration
  * author: Gustavo Pantuza, Fabrício Bedeschi
  * since: 06.07.2011
  */
 function clear() {
-  canvasObj.setAttribute('height', 250);
-  //ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    canvasObj.setAttribute('height', 250);
+    //ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
 /*
- * Função de criação de círculos
- * param x, y : São as coordenadas do centro do círculo
- * param r: raio da circunferência
- * return: Desenha o círculo no canvas
+ * Circles creation function
+ *
+ * param x, y : Certer of the circle coordinates
+ * param r: circle radio
+ * return: drawed circle on canvas 
  * 
  * author: Gustavo Pantuza, Fabrício Bedeschi
  * since: 06.07.2011
  */
 function circle(x,y,r) {
-	  ctx.beginPath();
-	  ctx.arc(x, y, r, 0, Math.PI*2, true);
-	  ctx.closePath();
-	  ctx.fill();
+    ctx.beginPath();
+	ctx.arc(x, y, r, 0, Math.PI*2, true);
+	ctx.closePath();
+	ctx.fill();
 }
 
 /*
- * Função de criação de retângulos
- * param x, y : Coordenadas do canto superior à esquerda do retângulo
- * param w : Define a largura do retângulo
- * param h : Define a altura do retângulo
- * return : Desenha o retângulo no canvas
+ * Rectangle creation function
+ *
+ * param x, y : left upper corner coordinates of the rectangle 
+ * param w : Define rectangle width
+ * param h : Define rectangle heigh
+ * return : drawed rectangle on canvas
  * 
  * author : Gustavo Pantuza, Fabrício Bedeschi
  * since : 06.07.2011
  */
 function rect(x,y,w,h) {
-	  ctx.beginPath();
-	  ctx.rect(x,y,w,h);
-	  ctx.closePath();
-	  ctx.fill();
+    ctx.beginPath();
+	ctx.rect(x,y,w,h);
+	ctx.closePath();
+	ctx.fill();
 }
 
 /*
- * Função para definir os limites de movimento do mouse
+ * Mouse limits moviment function
  * author : Gustavo Pantuza, Fabrício Bedeschi
  * since : 06.07.2011
  */
@@ -173,7 +170,7 @@ function init_mouse() {
  */
 function onMouseMove(evt) {
   if (evt.pageY > canvasMinY && (evt.pageY + paddle_h) < canvasMaxY) {
-	  if (player == 'p1')
+	  if (playerElm == 'p1')
 		  player1.y = parseInt(evt.pageY - canvasMinY);
 	  else
 		  player2.y = parseInt(evt.pageY - canvasMinY);
@@ -189,7 +186,7 @@ function onMouseMove(evt) {
  */
 function beforeDraw() {
 	
-	if (player == 'p1'){
+	if (playerElm == 'p1'){
 		msg( {p1 : player1} );
 	}else{
 		msg( {p2 : player2} );
@@ -263,7 +260,7 @@ function draw() {
  */
 function conect (p) {
 	
-	player = p;
+	playerElm = p;
 	
 	// instâcia um objeto do iosocket passando o endereço do servidor e a porta de conexão
 	socket = new io.Socket('192.168.0.101',{
@@ -274,7 +271,7 @@ function conect (p) {
 	// Evento sobre a ação de conectar ao servidor
 	socket.on('connect',function() {
 	  // Mostra uma mensagem ao cliente mostrando a conexão
-	  $("#"+player).children('a').text(player+' conectado');
+	  $("#"+playerElm).children('a').text(playerElm+' conectado');
 	});
 	
 	// Add a connect listener
@@ -288,7 +285,7 @@ function conect (p) {
 			init();
 		// senão atribui os objetos enviados pelo servidor aos objetos no cliente a serem redesenhados
 		}else {
-			if (player == 'p1'){
+			if (playerElm == 'p1'){
 				player2 = data.p2;
 			}else{
 				player1 = data.p1;
@@ -301,7 +298,7 @@ function conect (p) {
 	// Evento para desconetar o cliente
 	socket.on('disconnect',function() {
 	  // Mostra uma mensagem ao cliente que desconectou
-	  $("#"+player).children('a').text(player+' desconectado');
+	  $("#"+playerElm).children('a').text(playerElm+' desconectado');
 	});
 	
 	// Sends a message to the server via sockets
