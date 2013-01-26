@@ -18,45 +18,29 @@ var socket = io.listen(server);
 var player1;
 var player2;
 
-var onConnectionCallback = function(client){
+var onConnectionCallback = function (client) {
 	
-	// Se não existe player 1, atribui o cliente ao player1 
-	if( !player1 ){
+	// If not exists a player 1, create it
+	if (!player1) {
 		
-		console.log( "player 1 conectado!" );
 		player1 = client;
-		// Evento de escuta sobre mensagens enviadas ao server
-		player1.on('message', function(event){
-			msgFromPlayer1( event );
-		});
-		// Evento de escuta 'disconnect' do cliente
-		player1.on('disconnect', function(){
-			onDisconnect();
-		});
-		
-	
-	// Se não existe player 2, atribui o cliente ao player2
-	}else if( !player2 ){
-		
-		console.log( "player 2 conectado!" );
-		player2 = client;
-		// Evento de escuta sobre mensagens enviadas ao server
-		player2.on('message', function(event){
-			msgFromPlayer2( event );
-		});
-		// Evento de escuta 'disconnect' do cliente
-		player2.on('disconnect', function(){
-			onDisconnect();
-		});
-		
-	
-	// Senão, excedeu o limite de 2 usuários para o jogo. Um mensagem de notificação  é enviada ao cliente
-	}else {
-		client.send( {erro:'muitos usuarios'} );
-	}
- 
-}
+		player1.on('message', msgFromPlayer1);
+		player1.on('disconnect', onDisconnect);
+		console.log("player 1 Connected");
 
+	// If not exists player 2, create it
+	} else if (!player2) {
+		
+		player2 = client;
+		player2.on('message', msgFromPlayer2);
+		player2.on('disconnect', onDisconnect);
+		console.log( "player 2 conectado!" );
+
+	// Otherwise, notify client that there are too many user to play
+	} else {
+		client.send({erro:'Too many Users :/'});
+	}
+}
 
 // Connection event
 socket.on('connection', onConnectionCallback); 
@@ -73,7 +57,7 @@ function msgFromPlayer1(msg){
 		return
 	}
 	// Send message to player 2
-	player2.send( msg );
+	player2.send(msg);
 }
   
 /*
@@ -83,12 +67,12 @@ function msgFromPlayer1(msg){
  */
 function msgFromPlayer2(msg){
 
-	if(msg == "start"){
+	if (msg == "start"){
 		sendAll(msg);
 		return
 	}
 	// Send message to player 1
-	player1.send( msg );
+	player1.send(msg);
 }
 
 /*
