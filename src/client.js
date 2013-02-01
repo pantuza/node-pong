@@ -1,4 +1,5 @@
 
+var h3 = document.getElementsByTagName("h3")[0];
 
 var socket;
 
@@ -84,7 +85,7 @@ function init() {
 		player1.y = player2.y = (HEIGHT /2)-(paddle_h/2);
 		
 		// Define canvas limits horizontally
-		canvasMinX = $("#canvas").offset().left;
+		canvasMinX = canvasObj.offsetLeft;
 		canvasMaxX = canvasMinX + WIDTH;
 		
 		// Initial position of the ball
@@ -95,7 +96,7 @@ function init() {
 		init_mouse();
 		
 		// Bind mousemove event to the onMouseMove function
-		$(document).mousemove(onMouseMove);
+		document.documentElement.onmousemove = onMouseMove;
 		
 		// Create the beforeDraw function interval call
 		intervalId = setInterval(beforeDraw, 100);
@@ -158,7 +159,7 @@ function rect(x,y,w,h) {
  */
 function init_mouse() {
 	
-  canvasMinY = $("#canvas").offset().top;
+  canvasMinY = canvasObj.offsetTop;
   canvasMaxY = canvasMinY + HEIGHT;
 }
 
@@ -258,9 +259,9 @@ function draw() {
  * param p : Id do elemento html do player a se conectar ('p1' ou 'p2')
  * 
  */
-function conect (p) {
+function conect (element) {
 	
-	playerElm = p;
+	playerElm = document.getElementById(element);
 	
 	// instâcia um objeto do iosocket passando o endereço do servidor e a porta de conexão
 	socket = new io.Socket('192.168.0.101',{
@@ -271,7 +272,7 @@ function conect (p) {
 	// Evento sobre a ação de conectar ao servidor
 	socket.on('connect',function() {
 	  // Mostra uma mensagem ao cliente mostrando a conexão
-	  $("#"+playerElm).children('a').text(playerElm+' conectado');
+      playerElm.childNodes[0].textContent = element + ' connected';
 	});
 	
 	// Add a connect listener
@@ -280,7 +281,7 @@ function conect (p) {
 		// Se for a mensagem de start o jogo será iniciado
 		if (data == 'start'){
 			// Altera o título acima do canvas
-			$("h3").text("Que vença o melhor \\o\\o/o/");
+            h3.textContent = "The best player win!";
 			// chama a função init do Java Script
 			init();
 		// senão atribui os objetos enviados pelo servidor aos objetos no cliente a serem redesenhados
@@ -298,7 +299,7 @@ function conect (p) {
 	// Evento para desconetar o cliente
 	socket.on('disconnect',function() {
 	  // Mostra uma mensagem ao cliente que desconectou
-	  $("#"+playerElm).children('a').text(playerElm+' desconectado');
+        playerElm.childNodes[0].textContent = element + ' disconnected'; 
 	});
 	
 	// Sends a message to the server via sockets
