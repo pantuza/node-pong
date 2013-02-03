@@ -3,36 +3,9 @@
  */
 var Game = (function(canvas){
 
-        var h3 = document.getElementsByTagName("h3")[0],
-
+        var h3,
             // Controls the game start
             started = false,
-
-            // Defines which player ('p1', 'p2'). Stores the html element ID
-            playerElm,
-
-            /* right blade */
-            player1 = {
-                x : 0,
-                y : 0
-            },
-            /* left blade */
-            player2 = {
-                x : 0,
-                y : 0
-            },
-
-            /* Ball object */
-            ball = {
-                // Position
-                x  : 0,
-                y  : 0,
-            
-                // Displacement
-                dx : -8,
-                dy : 16,
-            },
-
 
             // controls setInterval
             intervalId = 0,
@@ -45,26 +18,23 @@ var Game = (function(canvas){
                 // Start the game
                 if (!started){
 
-                    canvasObj = document.getElementById('canvas');
-                    // Get the canvas element 2D context 
-                    canvasCtx = canvasObj.getContext("2d");
                     window.canvasCtx = canvasCtx;
                     // Define the canvas bitmap dimensions 
-                    canvasObj.setAttribute('width', 500);
-                    canvasObj.setAttribute('height', 250);
+                    canvas.obj.setAttribute('width', 500);
+                    canvas.obj.setAttribute('height', 250);
                     
                     // Assign the canvas object dimensions to the program
-                    WIDTH  = canvasObj.width;   
-                    HEIGHT = canvasObj.height;
+                    WIDTH  = canvas.obj.width;   
+                    HEIGHT = canvas.obj.height;
                     
                     // Put paddles on the abscissa: 5 px left, -5 px right
-                    player1.x = WIDTH -5;
-                    player2.x = 2;
+                    canvas.player1.x = WIDTH -5;
+                    canvas.player2.x = 2;
                     // Put paddles on the ordinate: vertically centralized
-                    player1.y = player2.y = (HEIGHT /2)-(paddle_h/2);
+                    canvas.player1.y = canvas.player2.y = (HEIGHT /2)-(paddle_h/2);
                     
                     // Define canvas limits horizontally
-                    canvasMinX = canvasObj.offsetLeft;
+                    canvasMinX = canvas.obj.offsetLeft;
                     canvasMaxX = canvasMinX + WIDTH;
                     
                     // Initial position of the ball
@@ -89,7 +59,7 @@ var Game = (function(canvas){
             /* Mouse limits moviment function */
             init_mouse = function() {
                 
-              canvasMinY = canvasObj.offsetTop;
+              canvasMinY = canvas.obj.offsetTop;
               canvasMaxY = canvasMinY + HEIGHT;
             },
 
@@ -99,9 +69,9 @@ var Game = (function(canvas){
               if (evt.pageY > canvasMinY && (evt.pageY + paddle_h) < canvasMaxY) {
               
                   if (playerElm == 'p1')
-                      player1.y = parseInt(evt.pageY - canvasMinY);
+                      canvas.player1.y = parseInt(evt.pageY - canvasMinY);
                   else
-                      player2.y = parseInt(evt.pageY - canvasMinY);
+                      canvas.player2.y = parseInt(evt.pageY - canvasMinY);
               }
             },
 
@@ -113,9 +83,9 @@ var Game = (function(canvas){
             beforeDraw = function() {
                 
                 if (playerElm == 'p1'){
-                    msg( {p1 : player1} );
+                    msg( {p1 : canvas.player1} );
                 }else{
-                    msg( {p2 : player2} );
+                    msg( {p2 : canvas.player2} );
                 }
                 
                 draw();
@@ -127,4 +97,10 @@ var Game = (function(canvas){
                 started = false;
                 clearInterval(intervalId);
             };
+
+            /* Name Space Constructor */
+            (function() {
+            
+                h3 = document.getElementsByTagName("h3")[0];
+            })();
 });

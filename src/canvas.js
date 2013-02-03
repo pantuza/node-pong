@@ -1,7 +1,7 @@
 /**
  * Canvas Name Space
  */
-var Canvas = (function(player1, player2, ball) {
+var Canvas = (function() {
 
         // Canvas Element Object
     var canvasObj,
@@ -15,6 +15,28 @@ var Canvas = (function(player1, player2, ball) {
         canvasMaxX,
         canvasMinY,
         canvasMaxY,
+
+        /* right blade */
+        player1 = {
+            x : 0,
+            y : 0
+        },
+        /* left blade */
+        player2 = {
+            x : 0,
+            y : 0
+        },
+
+        /* Ball object */
+        ball = {
+            // Position
+            x  : 0,
+            y  : 0,
+
+        // Displacement
+            dx : -8,
+            dy : 16,
+        },
 
         // Paddles Dimensions 
         paddle_h = 40,
@@ -50,7 +72,7 @@ var Canvas = (function(player1, player2, ball) {
          * param h : Define rectangle heigh
          * return : drawed rectangle on canvas
          */
-         rect = function(x, y, w, h) {
+        rect = function(x, y, w, h) {
             canvasCtx.beginPath();
             canvasCtx.rect(x,y,w,h);
             canvasCtx.closePath();
@@ -64,7 +86,7 @@ var Canvas = (function(player1, player2, ball) {
          * Controls the collisions of the ball inside the canvas based in 
          * the abscissas and ordinates 
          */
-         draw = function() {
+        draw = function() {
             // clean the canvas
             clear();
             // create the ball
@@ -110,13 +132,25 @@ var Canvas = (function(player1, player2, ball) {
             ball.y += ball.dy;
         };
 
+        /* Name Space contructor */
+        (function() {
+            canvasObj = document.getElementById('canvas');
+            // Get the canvas element 2D context 
+            canvasCtx = canvasObj.getContext("2d");
+        })();
+
     /* Name Space Public Methods */
     return {
+        canvas: canvasObj,
+        ctx: canvasCtx,
+        player1: player1,
+        player2: player2,
+        ball: ball,
+
         draw: function() {
             return draw();
         },
         
-        canvas: canvasObj
     }
 });
 

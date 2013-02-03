@@ -1,45 +1,42 @@
-
 /**
  * Server Connection Name Space
  */
-var Connection = (function(playerElm) {
+var Connection = (function() {
 
-    var SERVER_ADDR = '192.168.0.101',
+    var SERVER_ADDR = '127.0.0.1',
         PORT = 1234,
         
         socket,
 
+        // Defines which player ('p1', 'p2'). Stores the html element ID
+        playerElm,
+
         /*
-         * Função de troca de mensagem com o servidor
-         * param mensagem: objetos dos player a serem enviados ao servidor
+         * Function that send messages to the server
+         * param message: data to send to server
          */
         msg = function (message) {
               socket.send(message);
         },
 
-
         onConnectCallback = function() {
-            // Mostra uma mensagem ao cliente mostrando a conexão
             playerElm.childNodes[0].textContent = element + ' connected';
         },
 
         onMessageCallback = function(data) {
                 
-            // Se for a mensagem de start o jogo será iniciado
             if (data == 'start'){
-                // Altera o título acima do canvas
                 h3.textContent = "The best player win!";
-                // chama a função init do Java Script
                 init();
-                // senão atribui os objetos enviados pelo servidor aos objetos no cliente a serem redesenhados
+
             }else {
+                // create users 
                 if (playerElm == 'p1'){
-                    player2 = data.p2;
+                    canvas.player2 = data.p2;
                 }else{
-                    player1 = data.p1;
+                    canvas.player1 = data.p1;
                 }
             }
-            //ball = data.b; 
         },
 
         onDisconnectCallback = function() {
@@ -74,5 +71,4 @@ var Connection = (function(playerElm) {
 
         socket: socket
     }
-
 });
