@@ -2,7 +2,7 @@
  * Main Script. On document ready state it 
  * call other scripts to control the game
  */
-var = Client = (function(){
+var Client = (function(){
 
 
     var main = function() {
