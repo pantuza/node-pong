@@ -25,6 +25,10 @@
 			language especification:
 				http://www.ecmascript.org
 
+### STATUS
+
+    It is under development. Check the project page http://node-pong.com
+    Contribute :)
 
 ### AUTHOR
 > ###### Written by Gustavo Pantuza and Fabrício Bedeschi
@@ -32,8 +36,3 @@
 ### REPORTING BUGS
 
 > ###### Report node-pong bugs to gustavopantuza@gmail.com
-
---
- O/
-/||
- /\
