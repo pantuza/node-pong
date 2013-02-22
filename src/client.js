@@ -12,4 +12,6 @@ var Client = (function(){
         game = Game(canvas, connection);
     };
 
+    return main();
+
 })();
