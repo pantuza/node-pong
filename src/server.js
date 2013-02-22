@@ -3,11 +3,10 @@
  */
 var Server = (function(){
 
-    var SOCKET_IO_PATH = '/usr/local/lib/node_modules/socket.io',
-        PORT = 1234,
+    var PORT = 1234,
 
-        http = require('http'), 
-        io = require(SOCKET_IO_PATH),
+        http = require('http'),
+        io = require('socket.io'),
 
         server = undefined,
         socket = undefined,
@@ -92,29 +91,25 @@ var Server = (function(){
          */
         onDisconnect = function () {
             console.log('Server has disconnected');
-        },
+        };
 
         /**
          * Initialization method. Bind the server and socket events
          */
-        init = function() {
+        (function() {
 
-            // Start the server at port 8080
+            // Start the server
             server = http.createServer(serverAnswer);
             server.listen(PORT); // Define socket port to listen 
 
             // Instantiate socket.io using the created server
             socket = io.listen(server);
             socket.on('connection', onConnectionCallback);
-        };
+        })();
 
 
         /* NameSpace Public Methods */
         return {
-            start: function() {
-                return init();
-            },
-
             server: server
         }
-})()
+})();
