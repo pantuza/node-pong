@@ -63,6 +63,7 @@ var Server = (function(){
         onConnectionCallback = function (client) {
         
             // If not exists a player 1, create it
+            console.log(client);
             if (!player1) {
 
                 player1 = client;
