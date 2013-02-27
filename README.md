@@ -7,6 +7,8 @@
 
 	Classic ping-pong game using nodejs, socket.io, canvas and javaScript
 
+    PS: The project is under refactoring now. The web page is not working well
+
 ### DEPENDENCIES
 
 	We do not recomend to get/install the dependencies from linux 
