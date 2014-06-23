@@ -4,3 +4,4 @@
 *.swn
 *.swo
 src/node_modules
+src/build
