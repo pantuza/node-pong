@@ -33,7 +33,7 @@
     Contribute :)
 
 ### AUTHOR
-> ###### Written by Gustavo Pantuza and Fabrício Bedeschi
+> ###### Written by Gustavo Pantuza
 
 ### REPORTING BUGS
 
