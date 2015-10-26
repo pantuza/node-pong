@@ -20,15 +20,8 @@ build:
 clean:	
 	sudo rm ${BUILD} -rf
 
-nodejs:	build
-	@echo -e "INSTALLING NODE JS...\n"
-	wget -O ${BUILD}/nodejs.tgz ${NODE_URL}
-	tar -xzvf ${BUILD}/nodejs.tgz -C ${BUILD}
-	rm -fv ${BUILD}/nodejs.tgz
-	$(eval nodesrc := $(shell ls ${BUILD}))
-	./${BUILD}/${nodesrc}/configure
-	sudo make -C ${BUILD}/${nodesrc}
-	sudo make install -C ${BUILD}/${nodesrc}
+nodejs:	
+	$(PKGMGR) install nodejs
 
 socketio: 
 	@echo -e "INSTALLING SOCKET IO...\n"
