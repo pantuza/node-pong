@@ -12,7 +12,7 @@
 <body>
 <div id="all">
     <div id="header">
-    	<h3>Node Pong</h3>
+    	<h3 id="canvas_header" >Node Pong</h3>
     </div>
     <canvas id="canvas"></canvas>
 	
@@ -21,10 +21,11 @@
  
     	<span id="p2"><a href="#" >Conect P2</a></span>
 
-    	<a id="start" href="#" onclick="msg('start');">start</a>
+    	<a id="start" href="#" >start</a>
     </div>
 </div>
-	<script src="http://127.0.0.1:1234/socket.io/socket.io.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+
 	<script type="text/javascript" src="canvas.js"></script>
 	<script type="text/javascript" src="connection.js"></script>
 	<script type="text/javascript" src="game.js"></script>
