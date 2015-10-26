@@ -3,5 +3,5 @@
 *.swm
 *.swn
 *.swo
-src/node_modules
+node_modules
 src/build
