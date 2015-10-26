@@ -8,8 +8,8 @@ var Client = (function(){
     var main = function() {
 
         canvas = Canvas();
-        connection = Connection();
-        game = Game(canvas, connection);
+        game = Game(canvas);
+        connection = Connection(game);
     };
 
     return main();
