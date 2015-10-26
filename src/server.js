@@ -3,10 +3,12 @@
  */
 var Server = (function(){
 
-    var PORT = 1234,
+    var PORT = 3000,
 
-        http = require('http'),
-        io = require('socket.io'),
+        express = require('express')
+        app = express(),
+        http = require('http').Server(app),
+        io = require('socket.io')(http),
 
         server = undefined,
         socket = undefined,
@@ -19,8 +21,11 @@ var Server = (function(){
         serverAnswer = function(req, res) {
 
             // Send HTML headers and message
-            res.writeHead(200,{ 'Content-Type': 'text/html' });
-            res.end('<h1>Hello Socket Lover!</h1>');
+            //res.writeHead(200, {
+            //    'Content-Type': 'text/html',
+            //});
+            res.header("Access-Control-Allow-Origin", "*")
+            res.sendFile(__dirname + '/index.html');
         },
 
         /*
@@ -63,7 +68,6 @@ var Server = (function(){
         onConnectionCallback = function (client) {
         
             // If not exists a player 1, create it
-            console.log(client);
             if (!player1) {
 
                 player1 = client;
@@ -100,17 +104,23 @@ var Server = (function(){
         (function() {
 
             // Start the server
-            server = http.createServer(serverAnswer);
-            server.listen(PORT); // Define socket port to listen 
+            //server = http.createServer(serverAnswer);
+            app.get("/", serverAnswer);
+            app.use(express.static(__dirname + "/"));
+            //server.listen(PORT); // Define socket port to listen 
+            http.listen(PORT, function () {
+                console.log("Node-Pong listening on port " + PORT);
+            });
 
             // Instantiate socket.io using the created server
-            socket = io.listen(server);
-            socket.on('connection', onConnectionCallback);
+            //socket = io.listen(http);
+            io.on('connection', onConnectionCallback);
+
         })();
 
 
         /* NameSpace Public Methods */
         return {
-            server: server
+            server: http
         }
 })();
