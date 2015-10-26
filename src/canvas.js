@@ -146,6 +146,8 @@ var Canvas = (function() {
         player1: player1,
         player2: player2,
         ball: ball,
+        paddle_h: paddle_h,
+        paddle_w: paddle_w,
 
         draw: function() {
             return draw();
