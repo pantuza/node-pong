@@ -1,20 +1,22 @@
 /**
  * Server Connection Name Space
  */
-var Connection = (function() {
+var Connection = (function(game) {
 
     var SERVER_ADDR = '127.0.0.1',
-        PORT = 1234,
+        PORT = 3000,
         
         socket,
 
         // Defines which player ('p1', 'p2'). Stores the html element ID
-        playerElm,
+        //playerElm,
 
         // player buttons to bind click event
         playerButtons,
         // loop index
         i = 0,
+
+        h3 = undefined,
 
         /*
          * Function that send messages to the server
@@ -22,21 +24,22 @@ var Connection = (function() {
          */
         msg = function (message) {
               socket.send(message);
+              console.log(message);
         },
 
         onConnectCallback = function() {
-            playerElm.childNodes[0].textContent = element + ' connected';
+            playerElm.childNodes[0].textContent = playerElm.id + ' connected';
         },
 
         onMessageCallback = function(data) {
                 
             if (data == 'start'){
                 h3.textContent = "The best player win!";
-                init();
+                game.init();
 
             }else {
                 // create users 
-                if (playerElm == 'p1'){
+                if (playerElm.id == 'p1'){
                     canvas.player2 = data.p2;
                 }else{
                     canvas.player1 = data.p1;
@@ -45,8 +48,8 @@ var Connection = (function() {
         },
 
         onDisconnectCallback = function() {
-              // Mostra uma mensagem ao cliente que desconectou
-                playerElm.childNodes[0].textContent = element + ' disconnected'; 
+            // Mostra uma mensagem ao cliente que desconectou
+            playerElm.childNodes[0].textContent = playerElm.id + ' disconnected'; 
         },
 
         /*
@@ -55,22 +58,28 @@ var Connection = (function() {
          */
         connect = function(event) {
             
-            playerElm = this.parentElement;
+            var listener = function () {
+                return false;
+            };
+
+            window.playerElm = this.parentElement;
+            //window.playerElm = playerElm;
 
             // unbind the other button to not let the user create another player
             if(playerElm.id === 'p1') {
-                playerButtons[1].removeEventListener('click');
+                playerButtons[1].removeEventListener('click', listener);
             } else {
-                playerButtons[0].removeEventListener('click');
+                playerButtons[0].removeEventListener('click', listener);
             }
             // instâcia um objeto do iosocket passando o endereço do servidor e a porta de conexão
-            socket = new io.Socket(SERVER_ADDR, { port: PORT });
-            socket.connect();
+            socket = new io(SERVER_ADDR + ":" + PORT);
             
             socket.on('connect', onConnectCallback);
             socket.on('message', onMessageCallback);
             socket.on('disconnect', onDisconnectCallback);
             
+            socket.connect();
+
             event.preventDefault();
             event.stopPropagation();
         };
@@ -84,6 +93,18 @@ var Connection = (function() {
             for( ; i < playerButtons.length; i++) {
                 playerButtons[i].addEventListener('click', connect, false);
             }
+
+            startButton = document.getElementById('start');
+            startButton.addEventListener('click', function (event) {
+                msg('start');
+                event.preventDefault();
+                event.stopPropagation();
+            });
+
+            h3 = document.getElementById('canvas_header');
+
+            window.msg = msg;
+
         })();
 
     /* Name Space Public methods and attributes */
@@ -92,6 +113,11 @@ var Connection = (function() {
             return connect(elm);
         },
 
-        socket: socket
+        socket: socket,
+
+        msg: function (message) {
+            return msg(message);
+        }
+
     }
 });
