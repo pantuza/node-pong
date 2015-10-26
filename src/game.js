@@ -1,11 +1,10 @@
 /**
  * Game Name Space 
  */
-var Game = (function(canvas){
+var Game = (function(canvas) {
 
-        var h3,
             // Controls the game start
-            started = false,
+        var started = false,
 
             // controls setInterval
             intervalId = 0,
@@ -18,28 +17,28 @@ var Game = (function(canvas){
                 // Start the game
                 if (!started){
 
-                    window.canvasCtx = canvasCtx;
+                    window.canvasCtx = canvas.ctx;
                     // Define the canvas bitmap dimensions 
-                    canvas.obj.setAttribute('width', 500);
-                    canvas.obj.setAttribute('height', 250);
+                    canvas.canvas.setAttribute('width', 500);
+                    canvas.canvas.setAttribute('height', 250);
                     
                     // Assign the canvas object dimensions to the program
-                    WIDTH  = canvas.obj.width;   
-                    HEIGHT = canvas.obj.height;
+                    WIDTH  = canvas.canvas.width;   
+                    HEIGHT = canvas.canvas.height;
                     
                     // Put paddles on the abscissa: 5 px left, -5 px right
                     canvas.player1.x = WIDTH -5;
                     canvas.player2.x = 2;
                     // Put paddles on the ordinate: vertically centralized
-                    canvas.player1.y = canvas.player2.y = (HEIGHT /2)-(paddle_h/2);
+                    canvas.player1.y = canvas.player2.y = (HEIGHT /2)-(canvas.paddle_h/2);
                     
                     // Define canvas limits horizontally
-                    canvasMinX = canvas.obj.offsetLeft;
+                    canvasMinX = canvas.canvas.offsetLeft;
                     canvasMaxX = canvasMinX + WIDTH;
                     
                     // Initial position of the ball
-                    ball.x = WIDTH /2;
-                    ball.y = HEIGHT /2;
+                    canvas.ball.x = WIDTH /2;
+                    canvas.ball.y = HEIGHT /2;
                     //
                     // Define mouse moviments limits on the screen
                     init_mouse();
@@ -59,14 +58,14 @@ var Game = (function(canvas){
             /* Mouse limits moviment function */
             init_mouse = function() {
                 
-              canvasMinY = canvas.obj.offsetTop;
+              canvasMinY = canvas.canvas.offsetTop;
               canvasMaxY = canvasMinY + HEIGHT;
             },
 
             /* Paddles control function */
             onMouseMove = function(evt) {
 
-              if (evt.pageY > canvasMinY && (evt.pageY + paddle_h) < canvasMaxY) {
+              if (evt.pageY > canvasMinY && (evt.pageY + canvas.paddle_h) < canvasMaxY) {
               
                   if (playerElm == 'p1')
                       canvas.player1.y = parseInt(evt.pageY - canvasMinY);
@@ -88,7 +87,7 @@ var Game = (function(canvas){
                     msg( {p2 : canvas.player2} );
                 }
                 
-                draw();
+                canvas.draw();
             },
 
             /* Função de finalização do jogo */
@@ -100,7 +99,12 @@ var Game = (function(canvas){
 
             /* Name Space Constructor */
             (function() {
-            
-                h3 = document.getElementsByTagName("h3")[0];
+                window.fimJogo = fimJogo; 
             })();
+
+            return {
+                init: function () {
+                    return init();
+                }
+            }
 });
