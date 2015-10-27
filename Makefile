@@ -32,6 +32,6 @@ else
 	npm install socket.io
 endif
 
-run: server.js
-	node server.js
+run: $(SRC)/server.js
+	@node $^
 
