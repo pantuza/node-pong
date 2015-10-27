@@ -1,37 +1,35 @@
-# Makefile to install project dependencies
+#
+#
+# Makefile of Node Pong game
 #
 # Author: Gustavo Pantuza
 # Since: 29.03.2013
 #
 
+
+
+# Source code directory
 SRC := src
-BUILD := build
 
-NODE_URL := "http://nodejs.org/dist/v0.10.2/node-v0.10.2.tar.gz"
+# The node_modules directory created by the npm installer
+PKGS := node_modules
 
-.PHONY := install
 
-install: nodejs socketio clean | build
-	@echo -e "\n--\nTry: make run"
-	@echo -e "open your browser on file://$(shell pwd)/index.html"
-build:	
-	mkdir -pv build
 
-clean:	
-	sudo rm ${BUILD} -rf
+#
+# TARGET RULES
+#
 
-nodejs:	
-	$(PKGMGR) install nodejs
 
-socketio: 
-	@echo -e "INSTALLING SOCKET IO...\n"
-	$(eval installed := $(shell which npm 2> /dev/null))
-ifeq (${installed},"")
-	@echo "npm not installed. Try make nodejs to install npm"
-else 
-	npm install socket.io
-endif
+# Install all the game dependencies
+install:
+	@npm install
 
+# Remove local installed files
+clean:
+	@rm -rvf $(PKGS)
+
+
+# Run the game server 
 run: $(SRC)/server.js
 	@node $^
-
