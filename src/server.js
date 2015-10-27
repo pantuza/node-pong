@@ -109,7 +109,12 @@ var Server = (function(){
             app.use(express.static(__dirname + "/"));
             //server.listen(PORT); // Define socket port to listen 
             http.listen(PORT, function () {
-                console.log("Node-Pong listening on port " + PORT);
+                console.log([
+                    "Node-Pong listening on port ", PORT,
+                    "\nOpen two different tabs or browsers at ",
+                    "localhost:", PORT, " and connect players",
+                    "\n\nEnjoy the game : )"
+                ].join(""));
             });
 
             // Instantiate socket.io using the created server
