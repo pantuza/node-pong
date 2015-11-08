@@ -96,6 +96,74 @@ var Canvas = function() {
     },
 
 
+    /* 
+     * Sets positions of the players paddles 
+     */
+    _setPaddles = function () {
+    
+        // Put paddles on the abscissa: 5 px left, -5 px right
+        player1.x = canvasObj.width -5;
+        player2.x = 2;
+        // Put paddles on the ordinate: vertically centralized
+        player1.y = player2.y = (canvasObj.height /2)-(paddle_h/2);
+    },
+
+
+    /*
+     * Define canvas limits horizontally
+     */
+    _setLimits = function () {
+        canvasMinX = canvasObj.offsetLeft;
+        canvasMaxX = canvasMinX + canvasObj.width;
+    }
+
+
+    /* 
+     * Sets the ball start point in the canvas
+     */
+    _setBallStartPosition = function () {
+    
+        ball.x = canvasObj.width / 2;
+        ball.y = canvasObj.height / 2;
+    },
+
+
+    /* 
+     * Mouse limits moviment function 
+     */
+    _setMouse = function() {
+        
+      canvasMinY = canvasObj.offsetTop;
+      canvasMaxY = canvasMinY + canvasObj.height;
+    },
+
+
+    /* 
+     * Paddles control function 
+     */
+    _onMouseMove = function(evt) {
+
+      if (evt.pageY > canvasMinY && (evt.pageY + canvas.paddle_h) < canvasMaxY) {
+      
+          if (playerElm == 'p1')
+              canvas.player1.y = parseInt(evt.pageY - canvasMinY);
+          else
+              canvas.player2.y = parseInt(evt.pageY - canvasMinY);
+      }
+    },
+
+
+    /*
+     * Start the game objects on the canvas 
+     */
+    _startObjectsOnCanvas = function () {
+
+        _setPaddles();
+        _setLimits(); 
+        _setBallStartPosition();
+        _setMouse();
+    },
+
 
     /*
      * Draw entire game on canvas. For each interval execution
@@ -166,6 +234,8 @@ var Canvas = function() {
         paddle_w: paddle_w,
 
         setDimensions: _setDimensions,
+        startObjectsOnCanvas: _startObjectsOnCanvas,
+        onMouseMove: _onMouseMove,
         draw: _draw 
     }
 }
