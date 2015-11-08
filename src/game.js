@@ -19,12 +19,12 @@ var Game = function(canvas) {
 
             window.canvasCtx = canvas.ctx;
 
-            setCanvasDimensions();
+            canvas.setDimensions(500, 250);
             setGamePaddles();
             
             // Define canvas limits horizontally
-            // canvasMinX = canvas.canvas.offsetLeft;
-            // canvasMaxX = canvasMinX + canvas.canvas.width;
+            // canvasMinX = canvas.obj.offsetLeft;
+            // canvasMaxX = canvasMinX + canvas.obj.width;
             
             setBallStartPosition();
             init_mouse();
@@ -40,15 +40,6 @@ var Game = function(canvas) {
     },
 
 
-    /* 
-     * Defines the canvas bitmap dimensions 
-     */
-    setCanvasDimensions = function () {
-
-        canvas.canvas.setAttribute('width', 500);
-        canvas.canvas.setAttribute('height', 250);
-    },
-
 
     /* 
      * Sets positions of the players paddles 
@@ -56,10 +47,10 @@ var Game = function(canvas) {
     setGamePaddles = function () {
     
         // Put paddles on the abscissa: 5 px left, -5 px right
-        canvas.player1.x = canvas.canvas.width -5;
+        canvas.player1.x = canvas.obj.width -5;
         canvas.player2.x = 2;
         // Put paddles on the ordinate: vertically centralized
-        canvas.player1.y = canvas.player2.y = (canvas.canvas.height /2)-(canvas.paddle_h/2);
+        canvas.player1.y = canvas.player2.y = (canvas.obj.height /2)-(canvas.paddle_h/2);
     },
 
 
@@ -68,8 +59,8 @@ var Game = function(canvas) {
      */
     setBallStartPosition = function () {
     
-        canvas.ball.x = canvas.canvas.width /2;
-        canvas.ball.y = canvas.canvas.height /2;
+        canvas.ball.x = canvas.obj.width /2;
+        canvas.ball.y = canvas.obj.height /2;
     },
 
 
@@ -78,8 +69,8 @@ var Game = function(canvas) {
      */
     init_mouse = function() {
         
-      canvasMinY = canvas.canvas.offsetTop;
-      canvasMaxY = canvasMinY + canvas.canvas.height;
+      canvasMinY = canvas.obj.offsetTop;
+      canvasMaxY = canvasMinY + canvas.obj.height;
     },
 
 
