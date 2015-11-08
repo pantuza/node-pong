@@ -20,17 +20,10 @@ var Game = function(canvas) {
             window.canvasCtx = canvas.ctx;
 
             canvas.setDimensions(500, 250);
-            setGamePaddles();
-            
-            // Define canvas limits horizontally
-            // canvasMinX = canvas.obj.offsetLeft;
-            // canvasMaxX = canvasMinX + canvas.obj.width;
-            
-            setBallStartPosition();
-            init_mouse();
+            canvas.startObjectsOnCanvas();
             
             // Bind mousemove event to the onMouseMove function
-            document.documentElement.onmousemove = onMouseMove;
+            document.documentElement.onmousemove = canvas.onMouseMove;
             
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
@@ -39,54 +32,6 @@ var Game = function(canvas) {
         } else throw new Error("Game already started!");
     },
 
-
-
-    /* 
-     * Sets positions of the players paddles 
-     */
-    setGamePaddles = function () {
-    
-        // Put paddles on the abscissa: 5 px left, -5 px right
-        canvas.player1.x = canvas.obj.width -5;
-        canvas.player2.x = 2;
-        // Put paddles on the ordinate: vertically centralized
-        canvas.player1.y = canvas.player2.y = (canvas.obj.height /2)-(canvas.paddle_h/2);
-    },
-
-
-    /* 
-     * Sets the ball start point in the canvas
-     */
-    setBallStartPosition = function () {
-    
-        canvas.ball.x = canvas.obj.width /2;
-        canvas.ball.y = canvas.obj.height /2;
-    },
-
-
-    /* 
-     * Mouse limits moviment function 
-     */
-    init_mouse = function() {
-        
-      canvasMinY = canvas.obj.offsetTop;
-      canvasMaxY = canvasMinY + canvas.obj.height;
-    },
-
-
-    /* 
-     * Paddles control function 
-     */
-    onMouseMove = function(evt) {
-
-      if (evt.pageY > canvasMinY && (evt.pageY + canvas.paddle_h) < canvasMaxY) {
-      
-          if (playerElm == 'p1')
-              canvas.player1.y = parseInt(evt.pageY - canvasMinY);
-          else
-              canvas.player2.y = parseInt(evt.pageY - canvasMinY);
-      }
-    },
 
 
     /*
