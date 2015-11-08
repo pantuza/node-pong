@@ -99,16 +99,14 @@ var Game = function(canvas) {
 
 
     /*
-     * Dispara uma mensagem para o servidor 'nodejs' informando
-     * os posicionamentos do players e em seguida executa a 
-     * função de desenho do jogo
+     * Function that triggers messages to players and then redraw the canvas
      */
     beforeDraw = function() {
         
         if (playerElm == 'p1'){
-            msg( {p1 : canvas.player1} );
-        }else{
-            msg( {p2 : canvas.player2} );
+            msg({p1: canvas.player1});
+        } else {
+            msg({p2: canvas.player2});
         }
         
         canvas.draw();
@@ -116,9 +114,9 @@ var Game = function(canvas) {
 
 
     /* 
-     * Função de finalização do jogo 
+     * Function to end the game
      */
-    fimJogo = function(){
+    _endGame = function() {
         
         STARTED = false;
         clearInterval(INTERVAL_ID);
@@ -126,11 +124,7 @@ var Game = function(canvas) {
     };
 
 
-    /* Name Space Constructor */
-    (function() {
-        window.fimJogo = fimJogo; 
-    })();
-
+    window.fimJogo = _endGame; 
 
     return {
         init: _init,
