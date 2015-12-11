@@ -9,7 +9,7 @@ var Client = (function(){
 
         canvas = new Canvas();
         game = new Game(canvas);
-        connection = Connection(game);
+        connection = new Connection(game);
     };
 
     return main();
