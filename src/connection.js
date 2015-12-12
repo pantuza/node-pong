@@ -9,7 +9,7 @@ var Connection = function(game) {
         socket,
 
         // Defines which player ('p1', 'p2'). Stores the html element ID
-        //playerElm,
+        playerElm,
 
         // player buttons to bind click event
         playerButtons,
@@ -31,7 +31,7 @@ var Connection = function(game) {
          *
          */
         onConnectCallback = function() {
-            playerElm.childNodes[0].textContent = playerElm.id + ' connected';
+            this.playerElm.childNodes[0].textContent = this.playerElm.id + ' connected';
         },
 
 
@@ -46,7 +46,7 @@ var Connection = function(game) {
 
             } else {
                 // create users
-                if (playerElm.id == 'p1') {
+                if (this.playerElm.id == 'p1') {
                     canvas.player2 = data.p2;
                 } else {
                     canvas.player1 = data.p1;
@@ -60,7 +60,7 @@ var Connection = function(game) {
          */
         onDisconnectCallback = function() {
             /* Shows a message to the user that disconnected */
-            playerElm.childNodes[0].textContent = playerElm.id + ' disconnected';
+            this.playerElm.childNodes[0].textContent = this.playerElm.id + ' disconnected';
         },
 
 
@@ -74,11 +74,10 @@ var Connection = function(game) {
                 return false;
             };
 
-            window.playerElm = this.parentElement;
-            //window.playerElm = playerElm;
+            this.playerElm = this.parentElement;
 
             // unbind the other button to not let the user create another player
-            if(playerElm.id === 'p1') {
+            if(this.playerElm.id === 'p1') {
                 playerButtons[1].removeEventListener('click', listener);
             } else {
                 playerButtons[0].removeEventListener('click', listener);
