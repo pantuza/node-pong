@@ -9,6 +9,8 @@ var Game = function(canvas) {
     // controls setInterval
     INTERVAL_ID = 0,
 
+    that = this,
+
     /*
      * Game initialization function. Construct all 
      * game execution elements.
@@ -39,7 +41,7 @@ var Game = function(canvas) {
      */
     beforeDraw = function() {
         
-        if (playerElm == 'p1'){
+        if (connection.playerElm == 'p1'){
             msg({p1: canvas.player1});
         } else {
             msg({p2: canvas.player2});
@@ -60,7 +62,11 @@ var Game = function(canvas) {
     };
 
 
-    window.fimJogo = _endGame; 
+    window.fimJogo = _endGame;
+
+    window.addEventListener('start', function (event) {
+        game.init();
+    }, false);
 
     return {
         init: _init,
