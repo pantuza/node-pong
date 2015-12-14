@@ -18,6 +18,8 @@ var Connection = function(game) {
 
         h3 = undefined,
 
+        that = this,
+
         /*
          * Function that send messages to the server
          * param message: data to send to server
@@ -31,7 +33,7 @@ var Connection = function(game) {
          *
          */
         onConnectCallback = function() {
-            this.playerElm.childNodes[0].textContent = this.playerElm.id + ' connected';
+            that.playerElm.childNodes[0].textContent = that.playerElm.id + ' connected';
         },
 
 
@@ -40,13 +42,15 @@ var Connection = function(game) {
          */
         onMessageCallback = function(data) {
 
-            if (data == 'start'){
+            if (data == 'start') {
                 h3.textContent = "The best player win!";
-                game.init();
+                var startEvent = new Event('start');
+                window.dispatchEvent(startEvent);
+                /* game.init(); */
 
             } else {
                 // create users
-                if (this.playerElm.id == 'p1') {
+                if (that.playerElm.id == 'p1') {
                     canvas.player2 = data.p2;
                 } else {
                     canvas.player1 = data.p1;
@@ -60,7 +64,7 @@ var Connection = function(game) {
          */
         onDisconnectCallback = function() {
             /* Shows a message to the user that disconnected */
-            this.playerElm.childNodes[0].textContent = this.playerElm.id + ' disconnected';
+            that.playerElm.childNodes[0].textContent = that.playerElm.id + ' disconnected';
         },
 
 
@@ -74,10 +78,10 @@ var Connection = function(game) {
                 return false;
             };
 
-            this.playerElm = this.parentElement;
+            that.playerElm = this.parentElement;
 
             // unbind the other button to not let the user create another player
-            if(this.playerElm.id === 'p1') {
+            if(that.playerElm.id === 'p1') {
                 playerButtons[1].removeEventListener('click', listener);
             } else {
                 playerButtons[0].removeEventListener('click', listener);
@@ -128,7 +132,9 @@ var Connection = function(game) {
 
         msg: function (message) {
             return msg(message);
-        }
+        },
+
+        playerElm: playerElm
 
     }
 };
