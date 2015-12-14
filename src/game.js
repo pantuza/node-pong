@@ -23,10 +23,10 @@ var Game = function(canvas) {
 
             canvas.setDimensions(500, 250);
             canvas.startObjectsOnCanvas();
-            
+
             // Bind mousemove event to the onMouseMove function
             document.documentElement.onmousemove = canvas.onMouseMove;
-            
+
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
             STARTED = true;
@@ -40,22 +40,22 @@ var Game = function(canvas) {
      * Function that triggers messages to players and then redraw the canvas
      */
     beforeDraw = function() {
-        
+
         if (connection.playerElm == 'p1'){
             msg({p1: canvas.player1});
         } else {
             msg({p2: canvas.player2});
         }
-        
+
         canvas.draw();
     },
 
 
-    /* 
+    /*
      * Function to end the game
      */
     _endGame = function() {
-        
+
         STARTED = false;
         clearInterval(INTERVAL_ID);
         window.alert("End of game");
