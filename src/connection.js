@@ -100,27 +100,23 @@ var Connection = function(game) {
         };
 
 
-        /* Name Space contructor */
-        (function() {
+        playerButtons = document.querySelectorAll("#p1 a, #p2 a");
 
-            playerButtons = document.querySelectorAll("#p1 a, #p2 a");
+        for( ; i < playerButtons.length; i++) {
+            playerButtons[i].addEventListener('click', connect, false);
+        }
 
-            for( ; i < playerButtons.length; i++) {
-                playerButtons[i].addEventListener('click', connect, false);
-            }
+        startButton = document.getElementById('start');
+        startButton.addEventListener('click', function (event) {
+            msg('start');
+            event.preventDefault();
+            event.stopPropagation();
+        });
 
-            startButton = document.getElementById('start');
-            startButton.addEventListener('click', function (event) {
-                msg('start');
-                event.preventDefault();
-                event.stopPropagation();
-            });
+        h3 = document.getElementById('canvas_header');
 
-            h3 = document.getElementById('canvas_header');
+        window.msg = msg;
 
-            window.msg = msg;
-
-        })();
 
     /* Name Space Public methods and attributes */
     return {
