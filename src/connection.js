@@ -13,6 +13,7 @@ var Connection = function(game) {
 
         // player buttons to bind click event
         playerButtons,
+
         // loop index
         i = 0,
 
@@ -20,7 +21,7 @@ var Connection = function(game) {
 
         that = this,
 
-        /*
+        /**
          * Function that send messages to the server
          * param message: data to send to server
          */
@@ -29,8 +30,8 @@ var Connection = function(game) {
               console.log(message);
         },
 
-        /* Callback for client connection on server
-         *
+        /**
+         * Callback for client connection on server
          */
         onConnectCallback = function() {
             that.playerElm.childNodes[0].textContent = that.playerElm.id + ' connected';
@@ -114,8 +115,6 @@ var Connection = function(game) {
         });
 
         h3 = document.getElementById('canvas_header');
-
-        window.msg = msg;
 
 
     /* Name Space Public methods and attributes */
