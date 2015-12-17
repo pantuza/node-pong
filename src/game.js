@@ -42,9 +42,9 @@ var Game = function(canvas) {
     beforeDraw = function() {
 
         if (connection.playerElm == 'p1'){
-            msg({p1: canvas.player1});
+            connection.msg({p1: canvas.player1});
         } else {
-            msg({p2: canvas.player2});
+            connection.msg({p2: canvas.player2});
         }
 
         canvas.draw();
