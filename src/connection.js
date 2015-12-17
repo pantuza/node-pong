@@ -4,6 +4,7 @@
 var Connection = function(game) {
 
     var SERVER_ADDR = '127.0.0.1',
+
         PORT = 3000,
 
         socket,
@@ -21,20 +22,25 @@ var Connection = function(game) {
 
         that = this,
 
+
         /**
          * Function that send messages to the server
          * param message: data to send to server
          */
         msg = function (message) {
+
               socket.send(message);
               console.log(message);
         },
+
 
         /**
          * Callback for client connection on server
          */
         onConnectCallback = function() {
-            that.playerElm.childNodes[0].textContent = that.playerElm.id + ' connected';
+
+            var text = that.playerElm.id + ' connected';
+            that.playerElm.childNodes[0].textContent = text;
         },
 
 
@@ -43,17 +49,22 @@ var Connection = function(game) {
          */
         onMessageCallback = function(data) {
 
-            if (data == 'start') {
+            /* Triggers the start event to begin the game */
+            if (data === 'start') {
+
                 h3.textContent = "The best player win!";
+
                 var startEvent = new Event('start');
                 window.dispatchEvent(startEvent);
-                /* game.init(); */
 
             } else {
-                // create users
+
+                /* sets the other player positions on canvas */
                 if (that.playerElm.id == 'p1') {
+
                     canvas.player2 = data.p2;
                 } else {
+
                     canvas.player1 = data.p1;
                 }
             }
@@ -61,15 +72,17 @@ var Connection = function(game) {
 
 
         /*
-         * When client disconnect this function is called
+         * When client disconnect this function is called and shows a 
+         * message to the user that disconnected
          */
         onDisconnectCallback = function() {
-            /* Shows a message to the user that disconnected */
-            that.playerElm.childNodes[0].textContent = that.playerElm.id + ' disconnected';
+
+            var text = that.playerElm.id + ' disconnected';
+            that.playerElm.childNodes[0].textContent = text;
         },
 
 
-        /*
+        /**
          * Function that connects to the server
          * param element: html element id to be connected ('p1' or 'p2')
          */
@@ -81,13 +94,18 @@ var Connection = function(game) {
 
             that.playerElm = this.parentElement;
 
-            // unbind the other button to not let the user create another player
+            /* unbind the other button to not let the user create
+             * another player
+             */
             if(that.playerElm.id === 'p1') {
+
                 playerButtons[1].removeEventListener('click', listener);
             } else {
+
                 playerButtons[0].removeEventListener('click', listener);
             }
-            // instâcia um objeto do iosocket passando o endereço do servidor e a porta de conexão
+
+            /* Creates an IO Socket with the server address binding on PORT */
             socket = new io(SERVER_ADDR + ":" + PORT);
 
             socket.on('connect', onConnectCallback);
@@ -104,6 +122,7 @@ var Connection = function(game) {
         playerButtons = document.querySelectorAll("#p1 a, #p2 a");
 
         for( ; i < playerButtons.length; i++) {
+
             playerButtons[i].addEventListener('click', connect, false);
         }
 
