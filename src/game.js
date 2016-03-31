@@ -1,5 +1,5 @@
 /**
- * Game Name Space 
+ * Game Name Space
  */
 var Game = function(canvas) {
 
@@ -9,10 +9,13 @@ var Game = function(canvas) {
     // controls setInterval
     INTERVAL_ID = 0,
 
+    /* Log div */
+    logDiv,
+
     that = this,
 
     /*
-     * Game initialization function. Construct all 
+     * Game initialization function. Construct all
      * game execution elements.
      */
     _init = function () {
@@ -20,6 +23,8 @@ var Game = function(canvas) {
         if (!STARTED){
 
             window.canvasCtx = canvas.ctx;
+
+            logDiv = document.getElementById("log");
 
             canvas.setDimensions(500, 250);
             canvas.startObjectsOnCanvas();
@@ -56,9 +61,16 @@ var Game = function(canvas) {
      */
     _endGame = function() {
 
-        STARTED = false;
-        clearInterval(INTERVAL_ID);
-        window.alert("End of game");
+        if(STARTED) {
+            STARTED = false;
+            clearInterval(INTERVAL_ID);
+
+            var content = document.createTextNode("End of game");
+            var lineBreak = document.createElement("br");
+
+            logDiv.appendChild(content);
+            logDiv.appendChild(lineBreak);
+        }
     };
 
 
