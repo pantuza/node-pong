@@ -1,5 +1,5 @@
 /**
- * Main Script. On document ready state it 
+ * Main Script. On document ready state it
  * calls other scripts to control the game
  */
 (function(){

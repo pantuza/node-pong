@@ -38,12 +38,12 @@ var Canvas = function() {
         dy : 16,
     },
 
-    // Paddles Dimensions 
+    // Paddles Dimensions
     paddle_h = 40,
     paddle_w = 3,
 
     /*
-     * Canvas clear function. It is called on each 
+     * Canvas clear function. It is called on each
      * algorithm redraw iteration
      */
     clear = function() {
@@ -56,7 +56,7 @@ var Canvas = function() {
      *
      * param x, y : Certer of the circle coordinates
      * param r: circle radio
-     * return: drawed circle on canvas 
+     * return: drawed circle on canvas
      */
     circle = function(x, y, r) {
         canvasCtx.beginPath();
@@ -69,7 +69,7 @@ var Canvas = function() {
     /*
      * Rectangle creation function
      *
-     * param x, y : left upper corner coordinates of the rectangle 
+     * param x, y : left upper corner coordinates of the rectangle
      * param w : Define rectangle width
      * param h : Define rectangle heigh
      * return : drawed rectangle on canvas
@@ -82,25 +82,25 @@ var Canvas = function() {
     },
 
 
-    /* 
-     * Defines the canvas bitmap dimensions 
+    /*
+     * Defines the canvas bitmap dimensions
      */
     _setDimensions = function (width, height) {
 
         if(!width || !height) {
             throw new Error("Missing parameters to set canvas dimensions");
-        } 
+        }
 
         canvas.obj.setAttribute('width', width);
         canvas.obj.setAttribute('height', height);
     },
 
 
-    /* 
-     * Sets positions of the players paddles 
+    /*
+     * Sets positions of the players paddles
      */
     _setPaddles = function () {
-    
+
         // Put paddles on the abscissa: 5 px left, -5 px right
         player1.x = canvasObj.width -5;
         player2.x = 2;
@@ -118,33 +118,33 @@ var Canvas = function() {
     }
 
 
-    /* 
+    /*
      * Sets the ball start point in the canvas
      */
     _setBallStartPosition = function () {
-    
+
         ball.x = canvasObj.width / 2;
         ball.y = canvasObj.height / 2;
     },
 
 
-    /* 
-     * Mouse limits moviment function 
+    /*
+     * Mouse limits moviment function
      */
     _setMouse = function() {
-        
+
       canvasMinY = canvasObj.offsetTop;
       canvasMaxY = canvasMinY + canvasObj.height;
     },
 
 
-    /* 
-     * Paddles control function 
+    /*
+     * Paddles control function
      */
     _onMouseMove = function(evt) {
 
       if (evt.pageY > canvasMinY && (evt.pageY + canvas.paddle_h) < canvasMaxY) {
-      
+
           if (playerElm == 'p1')
               canvas.player1.y = parseInt(evt.pageY - canvasMinY);
           else
@@ -154,12 +154,12 @@ var Canvas = function() {
 
 
     /*
-     * Start the game objects on the canvas 
+     * Start the game objects on the canvas
      */
     _startObjectsOnCanvas = function () {
 
         _setPaddles();
-        _setLimits(); 
+        _setLimits();
         _setBallStartPosition();
         _setMouse();
     },
@@ -168,39 +168,39 @@ var Canvas = function() {
     /*
      * Draw entire game on canvas. For each interval execution
      * clean the canvas and redraw objects with its current positions
-     * 
-     * Controls the collisions of the ball inside the canvas based in 
-     * the abscissas and ordinates 
+     *
+     * Controls the collisions of the ball inside the canvas based in
+     * the abscissas and ordinates
      */
     _draw = function() {
         // clean the canvas
         clear();
         // create the ball
         circle(ball.x, ball.y, 5);
-        
+
         //creates the paddles
         rect(player1.x, player1.y, paddle_w, paddle_h);
         rect(player2.x, player2.y, paddle_w, paddle_h);
-        
-        // Inverts the ball displacement if the ball dimensions 
+
+        // Inverts the ball displacement if the ball dimensions
         // is greater than the canvas vertical limits
         if (ball.y + ball.dy > HEIGHT || ball.y + ball.dy < 0){
             ball.dy = -ball.dy;
         }
-            
-        // If the ball is going to pass the game area 
+
+        // If the ball is going to pass the game area
         if (ball.x + ball.dx + paddle_w + 5 > WIDTH) {
-            
+
             // Inverts the ball displacement on abscissas
             // if the ball collided with the paddle
             if (ball.y > player1.y && ball.y < player1.y + paddle_h) {
                 ballcanvasObj= -ball.dx;
-            
+
             } else {
                 // End of the game
                 setTimeout(fimJogo,1000);
             }
-        
+
         // If the next moviment of the ball is smaller than the paddle
         }else if (ball.x + ball.dx < paddle_w + 5){
 
@@ -212,7 +212,7 @@ var Canvas = function() {
                 setTimeout(fimJogo,1000);
             }
         }
-        
+
         // move the ball
         ball.x += ball.dx;
         ball.y += ball.dy;
@@ -220,7 +220,7 @@ var Canvas = function() {
 
 
     canvasObj = document.getElementById('canvas');
-    // Get the canvas element 2D context 
+    // Get the canvas element 2D context
     canvasCtx = canvasObj.getContext("2d");
 
     /* Name Space Public Methods */
@@ -236,6 +236,6 @@ var Canvas = function() {
         setDimensions: _setDimensions,
         startObjectsOnCanvas: _startObjectsOnCanvas,
         onMouseMove: _onMouseMove,
-        draw: _draw 
+        draw: _draw
     }
 }
