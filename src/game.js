@@ -35,6 +35,7 @@ var Game = function(canvas) {
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
             STARTED = true;
+            _writeLog("Game started");
 
         } else throw new Error("Game already started!");
     },
@@ -56,6 +57,18 @@ var Game = function(canvas) {
     },
 
 
+    /**
+     * Writes log message on log div
+     */
+    _writeLog = function (message) {
+
+        var content = document.createTextNode(message);
+        var lineBreak = document.createElement("br");
+
+        logDiv.appendChild(content);
+        logDiv.appendChild(lineBreak);
+    }
+
     /*
      * Function to end the game
      */
@@ -64,24 +77,18 @@ var Game = function(canvas) {
         if(STARTED) {
             STARTED = false;
             clearInterval(INTERVAL_ID);
-
-            var content = document.createTextNode("End of game");
-            var lineBreak = document.createElement("br");
-
-            logDiv.appendChild(content);
-            logDiv.appendChild(lineBreak);
+            _writeLog("End of the game");
         }
     };
 
 
     window.fimJogo = _endGame;
 
-    window.addEventListener('start', function (event) {
-        game.init();
-    }, false);
+    window.addEventListener('start', _init, false);
 
     return {
         init: _init,
-        endGame: _endGame
+        endGame: _endGame,
+        writeLog: _writeLog
     }
 }
