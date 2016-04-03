@@ -64,7 +64,12 @@ var Game = function(canvas) {
         if(STARTED) {
             STARTED = false;
             clearInterval(INTERVAL_ID);
-            window.alert("End of game");
+
+            var content = document.createTextNode("End of game");
+            var lineBreak = document.createElement("br");
+
+            logDiv.appendChild(content);
+            logDiv.appendChild(lineBreak);
         }
     };
 
