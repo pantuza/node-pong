@@ -47,7 +47,7 @@ var Game = function(canvas) {
      */
     beforeDraw = function() {
 
-        if (connection.playerElm == 'p1'){
+        if (connection.playerElm.id == 'p1'){
             connection.msg({p1: canvas.player1});
         } else {
             connection.msg({p2: canvas.player2});
@@ -78,6 +78,7 @@ var Game = function(canvas) {
             STARTED = false;
             clearInterval(INTERVAL_ID);
             _writeLog("End of the game");
+            connection.socket.disconnect();
         }
     };
 
