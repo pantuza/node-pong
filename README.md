@@ -11,22 +11,17 @@
 
 ### DEPENDENCIES
 
-	We do not recomend to get/install the dependencies from linux 
-	distributions repositories. Get it from the oficial project by
-	compiling/installing the source/packages
+	nodejs - http://nodejs.org
+	socket.io - http://socket.io
+	express - http://expressjs.com
 
-		
-		nodejs - http://nodejs.org
+### INSTALLATION
 
-		socket.io - http://socket.io
-
-		canvas - https://developer.mozilla.org/en/html/canvas
-
-		javaScript - https://developer.mozilla.org/en/javascript
-			
-			language especification:
-				http://www.ecmascript.org
-
+Clone this project. Enter the directory and run:
+```bash
+$> npm install
+```
+	
 ### STATUS
 
     It is under development. Check the project page http://node-pong.com
