@@ -18,9 +18,19 @@
 ### INSTALLATION
 
 Clone this project. Enter the directory and run:
+
 ```bash
 $> npm install
 ```
+
+### RUNNING
+
+The project uses a Makefile. For running the server just do:
+
+```bash
+$> make run
+```
+
 	
 ### STATUS
 
