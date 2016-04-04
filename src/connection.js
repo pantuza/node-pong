@@ -29,7 +29,7 @@ var Connection = function(game) {
          */
         msg = function (message) {
 
-              socket.send(message);
+              socket.send(message, socket.id);
               console.log(message);
         },
 
