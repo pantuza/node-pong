@@ -11,22 +11,27 @@
 
 ### DEPENDENCIES
 
-	We do not recomend to get/install the dependencies from linux 
-	distributions repositories. Get it from the oficial project by
-	compiling/installing the source/packages
+	nodejs - http://nodejs.org
+	socket.io - http://socket.io
+	express - http://expressjs.com
 
-		
-		nodejs - http://nodejs.org
+### INSTALLATION
 
-		socket.io - http://socket.io
+Clone this project. Enter the directory and run:
 
-		canvas - https://developer.mozilla.org/en/html/canvas
+```bash
+$> npm install
+```
 
-		javaScript - https://developer.mozilla.org/en/javascript
-			
-			language especification:
-				http://www.ecmascript.org
+### RUNNING
 
+The project uses a Makefile. For running the server just do:
+
+```bash
+$> make run
+```
+
+	
 ### STATUS
 
     It is under development. Check the project page http://node-pong.com
