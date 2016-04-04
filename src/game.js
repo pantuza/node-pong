@@ -12,13 +12,13 @@ var Game = function(canvas) {
     /* Log div */
     logDiv,
 
-    that = this,
+    that = this;
 
     /*
      * Game initialization function. Construct all
      * game execution elements.
      */
-    _init = function () {
+    this.init = function () {
         // Start the game
         if (!STARTED){
 
@@ -35,7 +35,7 @@ var Game = function(canvas) {
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
             STARTED = true;
-            _writeLog("Game started");
+            that.writeLog("Game started");
 
         } else throw new Error("Game already started!");
     },
@@ -60,7 +60,7 @@ var Game = function(canvas) {
     /**
      * Writes log message on log div
      */
-    _writeLog = function (message) {
+    this.writeLog = function (message) {
 
         var content = document.createTextNode(message);
         var lineBreak = document.createElement("br");
@@ -72,25 +72,17 @@ var Game = function(canvas) {
     /*
      * Function to end the game
      */
-    _endGame = function() {
+    this.endGame = function() {
 
         if(STARTED) {
             STARTED = false;
             clearInterval(INTERVAL_ID);
 
-            _writeLog("End of the game");
+            that.writeLog("End of the game");
             connection.socket.disconnect();
         }
     };
 
 
-    window.fimJogo = _endGame;
-
-    window.addEventListener('start', _init, false);
-
-    return {
-        init: _init,
-        endGame: _endGame,
-        writeLog: _writeLog
-    }
+    window.addEventListener('start', this.init, false);
 }
