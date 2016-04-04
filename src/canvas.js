@@ -3,10 +3,11 @@
  */
 var Canvas = function() {
 
+    var that = this,
     // Canvas Element Object
-    var canvasObj,
+    _canvasObj,
     // Canvas Context
-    canvasCtx,
+    _canvasCtx,
     // Canvas Dimensions
     WIDTH,
     HEIGHT,
@@ -14,21 +15,21 @@ var Canvas = function() {
     canvasMinX,
     canvasMaxX,
     canvasMinY,
-    canvasMaxY,
+    canvasMaxY;
 
     /* right blade */
-    player1 = {
+    this.player1 = {
         x : 0,
         y : 0
     },
     /* left blade */
-    player2 = {
+    this.player2 = {
         x : 0,
         y : 0
     },
 
     /* Ball object */
-    ball = {
+    this.ball = {
         // Position
         x  : 0,
         y  : 0,
@@ -39,15 +40,15 @@ var Canvas = function() {
     },
 
     // Paddles Dimensions
-    paddle_h = 40,
-    paddle_w = 3,
+    this.paddle_h = 40,
+    this.paddle_w = 3,
 
     /*
      * Canvas clear function. It is called on each
      * algorithm redraw iteration
      */
     clear = function() {
-        canvasObj.setAttribute('height', 250);
+        _canvasObj.setAttribute('height', 250);
     },
 
 
@@ -59,10 +60,10 @@ var Canvas = function() {
      * return: drawed circle on canvas
      */
     circle = function(x, y, r) {
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, y, r, 0, Math.PI*2, true);
-        canvasCtx.closePath();
-        canvasCtx.fill();
+        _canvasCtx.beginPath();
+        _canvasCtx.arc(x, y, r, 0, Math.PI * 2, true);
+        _canvasCtx.closePath();
+        _canvasCtx.fill();
     },
 
 
@@ -75,24 +76,24 @@ var Canvas = function() {
      * return : drawed rectangle on canvas
      */
     rect = function(x, y, w, h) {
-        canvasCtx.beginPath();
-        canvasCtx.rect(x,y,w,h);
-        canvasCtx.closePath();
-        canvasCtx.fill();
+        _canvasCtx.beginPath();
+        _canvasCtx.rect(x,y,w,h);
+        _canvasCtx.closePath();
+        _canvasCtx.fill();
     },
 
 
     /*
      * Defines the canvas bitmap dimensions
      */
-    _setDimensions = function (width, height) {
+    this.setDimensions = function (width, height) {
 
         if(!width || !height) {
             throw new Error("Missing parameters to set canvas dimensions");
         }
 
-        canvas.obj.setAttribute('width', width);
-        canvas.obj.setAttribute('height', height);
+        _canvasObj.setAttribute('width', width);
+        _canvasObj.setAttribute('height', height);
     },
 
 
@@ -102,10 +103,10 @@ var Canvas = function() {
     _setPaddles = function () {
 
         // Put paddles on the abscissa: 5 px left, -5 px right
-        player1.x = canvasObj.width -5;
-        player2.x = 2;
+        that.player1.x = _canvasObj.width -5;
+        that.player2.x = 2;
         // Put paddles on the ordinate: vertically centralized
-        player1.y = player2.y = (canvasObj.height /2)-(paddle_h/2);
+        that.player1.y = that.player2.y = (_canvasObj.height /2)-(that.paddle_h/2);
     },
 
 
@@ -113,8 +114,8 @@ var Canvas = function() {
      * Define canvas limits horizontally
      */
     _setLimits = function () {
-        canvasMinX = canvasObj.offsetLeft;
-        canvasMaxX = canvasMinX + canvasObj.width;
+        canvasMinX = _canvasObj.offsetLeft;
+        canvasMaxX = canvasMinX + _canvasObj.width;
     }
 
 
@@ -123,8 +124,8 @@ var Canvas = function() {
      */
     _setBallStartPosition = function () {
 
-        ball.x = canvasObj.width / 2;
-        ball.y = canvasObj.height / 2;
+        that.ball.x = _canvasObj.width / 2;
+        that.ball.y = _canvasObj.height / 2;
     },
 
 
@@ -133,22 +134,22 @@ var Canvas = function() {
      */
     _setMouse = function() {
 
-      canvasMinY = canvasObj.offsetTop;
-      canvasMaxY = canvasMinY + canvasObj.height;
+      canvasMinY = _canvasObj.offsetTop;
+      canvasMaxY = canvasMinY + _canvasObj.height;
     },
 
 
     /*
      * Paddles control function
      */
-    _onMouseMove = function(evt) {
+    this.onMouseMove = function(evt) {
 
-      if (evt.pageY > canvasMinY && (evt.pageY + canvas.paddle_h) < canvasMaxY) {
+      if (evt.pageY > canvasMinY && (evt.pageY + that.paddle_h) < canvasMaxY) {
 
           if (connection.playerElm.id == 'p1')
-              canvas.player1.y = parseInt(evt.pageY - canvasMinY);
+              that.player1.y = parseInt(evt.pageY - canvasMinY);
           else
-              canvas.player2.y = parseInt(evt.pageY - canvasMinY);
+              that.player2.y = parseInt(evt.pageY - canvasMinY);
       }
     },
 
@@ -156,7 +157,7 @@ var Canvas = function() {
     /*
      * Start the game objects on the canvas
      */
-    _startObjectsOnCanvas = function () {
+    this.startObjectsOnCanvas = function () {
 
         _setPaddles();
         _setLimits();
@@ -172,29 +173,29 @@ var Canvas = function() {
      * Controls the collisions of the ball inside the canvas based in
      * the abscissas and ordinates
      */
-    _draw = function() {
+    this.draw = function() {
         // clean the canvas
         clear();
         // create the ball
-        circle(ball.x, ball.y, 5);
+        circle(this.ball.x, this.ball.y, 5);
 
         //creates the paddles
-        rect(player1.x, player1.y, paddle_w, paddle_h);
-        rect(player2.x, player2.y, paddle_w, paddle_h);
+        rect(this.player1.x, this.player1.y, this.paddle_w, this.paddle_h);
+        rect(this.player2.x, this.player2.y, this.paddle_w, this.paddle_h);
 
         // Inverts the ball displacement if the ball dimensions
         // is greater than the canvas vertical limits
-        if (ball.y + ball.dy > HEIGHT || ball.y + ball.dy < 0){
-            ball.dy = -ball.dy;
+        if (this.ball.y + this.ball.dy > HEIGHT || this.ball.y + this.ball.dy < 0){
+            this.ball.dy = -this.ball.dy;
         }
 
         // If the ball is going to pass the game area
-        if (ball.x + ball.dx + paddle_w + 5 > WIDTH) {
+        if (this.ball.x + this.ball.dx + this.paddle_w + 5 > WIDTH) {
 
             // Inverts the ball displacement on abscissas
             // if the ball collided with the paddle
-            if (ball.y > player1.y && ball.y < player1.y + paddle_h) {
-                ballcanvasObj= -ball.dx;
+            if (this.ball.y > this.player1.y && this.ball.y < this.player1.y + this.paddle_h) {
+                ballcanvasObj= -this.ball.dx;
 
             } else {
                 // End of the game
@@ -202,11 +203,11 @@ var Canvas = function() {
             }
 
         // If the next moviment of the ball is smaller than the paddle
-        }else if (ball.x + ball.dx < paddle_w + 5){
+        }else if (this.ball.x + this.ball.dx < this.paddle_w + 5){
 
             // Inverts the ball displacement if it collided with the paddle
-            if (ball.y > player2.y && ball.y < player2.y + paddle_h) {
-                ball.dx = -ball.dx;
+            if (this.ball.y > this.player2.y && this.ball.y < this.player2.y + this.paddle_h) {
+                this.ball.dx = -this.ball.dx;
             } else {
                 // End of the game
                 setTimeout(fimJogo,1000);
@@ -214,32 +215,19 @@ var Canvas = function() {
         }
 
         // move the ball
-        ball.x += ball.dx;
-        ball.y += ball.dy;
+        this.ball.x += this.ball.dx;
+        this.ball.y += this.ball.dy;
     };
 
 
-    canvasObj = document.getElementById('canvas');
-    WIDTH = canvasObj.width;
-    HEIGHT = canvasObj.height;
+    _canvasObj = document.getElementById('canvas');
+    WIDTH = _canvasObj.width;
+    HEIGHT = _canvasObj.height;
 
 
     // Get the canvas element 2D context
-    canvasCtx = canvasObj.getContext("2d");
+    _canvasCtx = _canvasObj.getContext("2d");
 
-    /* Name Space Public Methods */
-    return {
-        obj: canvasObj,
-        ctx: canvasCtx,
-        player1: player1,
-        player2: player2,
-        ball: ball,
-        paddle_h: paddle_h,
-        paddle_w: paddle_w,
-
-        setDimensions: _setDimensions,
-        startObjectsOnCanvas: _startObjectsOnCanvas,
-        onMouseMove: _onMouseMove,
-        draw: _draw
-    }
+    this.obj = _canvasObj;
+    this.ctx = _canvasCtx;
 }
