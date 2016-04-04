@@ -220,6 +220,10 @@ var Canvas = function() {
 
 
     canvasObj = document.getElementById('canvas');
+    WIDTH = canvasObj.width;
+    HEIGHT = canvasObj.height;
+
+
     // Get the canvas element 2D context
     canvasCtx = canvasObj.getContext("2d");
 
