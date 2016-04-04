@@ -22,7 +22,8 @@ a:hover{
 #header {
 	position: relative;
 }
-#canvas{
+
+#canvas {
 	position:relative;
 	height: 250px;
 	width: 500px;
@@ -32,6 +33,7 @@ a:hover{
     border-radius: 4px;
     right: 3px;
 }
+
 #users{
     text-align: center;
     height:30px;

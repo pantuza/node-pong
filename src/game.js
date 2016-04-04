@@ -35,6 +35,7 @@ var Game = function(canvas) {
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
             STARTED = true;
+            _writeLog("Game started");
 
         } else throw new Error("Game already started!");
     },
@@ -46,7 +47,7 @@ var Game = function(canvas) {
      */
     beforeDraw = function() {
 
-        if (connection.playerElm == 'p1'){
+        if (connection.playerElm.id == 'p1'){
             connection.msg({p1: canvas.player1});
         } else {
             connection.msg({p2: canvas.player2});
@@ -55,6 +56,18 @@ var Game = function(canvas) {
         canvas.draw();
     },
 
+
+    /**
+     * Writes log message on log div
+     */
+    _writeLog = function (message) {
+
+        var content = document.createTextNode(message);
+        var lineBreak = document.createElement("br");
+
+        logDiv.appendChild(content);
+        logDiv.appendChild(lineBreak);
+    }
 
     /*
      * Function to end the game
@@ -65,23 +78,19 @@ var Game = function(canvas) {
             STARTED = false;
             clearInterval(INTERVAL_ID);
 
-            var content = document.createTextNode("End of game");
-            var lineBreak = document.createElement("br");
-
-            logDiv.appendChild(content);
-            logDiv.appendChild(lineBreak);
+            _writeLog("End of the game");
+            connection.socket.disconnect();
         }
     };
 
 
     window.fimJogo = _endGame;
 
-    window.addEventListener('start', function (event) {
-        game.init();
-    }, false);
+    window.addEventListener('start', _init, false);
 
     return {
         init: _init,
-        endGame: _endGame
+        endGame: _endGame,
+        writeLog: _writeLog
     }
 }
