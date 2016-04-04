@@ -199,7 +199,7 @@ var Canvas = function() {
 
             } else {
                 // End of the game
-                setTimeout(fimJogo,1000);
+                setTimeout(game.endGame, 1000);
             }
 
         // If the next moviment of the ball is smaller than the paddle
@@ -210,7 +210,7 @@ var Canvas = function() {
                 this.ball.dx = -this.ball.dx;
             } else {
                 // End of the game
-                setTimeout(fimJogo,1000);
+                setTimeout(game.endGame, 1000);
             }
         }
 
