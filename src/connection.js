@@ -86,24 +86,13 @@ var Connection = function(game) {
      * Function that connects to the server
      * param element: html element id to be connected ('p1' or 'p2')
      */
-    this.connect = function(event) {
+    this.connect = function() {
 
         var listener = function () {
             return false;
         };
 
         that.playerElm = this.parentElement;
-
-        /* unbind the other button to not let the user create
-         * another player
-         */
-        if(that.playerElm.id === 'p1') {
-
-            playerButtons[1].removeEventListener('click', listener);
-        } else {
-
-            playerButtons[0].removeEventListener('click', listener);
-        }
 
         /* Creates an IO Socket with the server address binding on PORT */
         that.socket = new io(SERVER_ADDR + ":" + PORT);
@@ -113,25 +102,8 @@ var Connection = function(game) {
         that.socket.on('disconnect', onDisconnectCallback);
 
         that.socket.connect();
-
-        event.preventDefault();
-        event.stopPropagation();
     };
 
-
-    playerButtons = document.querySelectorAll("#p1 a, #p2 a");
-
-    for( ; i < playerButtons.length; i++) {
-
-        playerButtons[i].addEventListener('click', this.connect, false);
-    }
-
-    startButton = document.getElementById('start');
-    startButton.addEventListener('click', function (event) {
-        that.msg('start');
-        event.preventDefault();
-        event.stopPropagation();
-    });
 
     h3 = document.getElementById('canvas_header');
 };
