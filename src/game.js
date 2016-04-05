@@ -112,6 +112,9 @@ var Game = function(canvas) {
         createButton.style.display = "none";
         joinButton.style.display = "none";
         startButton.style.display = "block";
+
+        event.preventDefault();
+        event.stopPropagation();
     };
 
 
@@ -120,7 +123,22 @@ var Game = function(canvas) {
      */
     joinGameCallback = function (event) {
 
+        joinButton.style.display = "none";
+        createButton.style.display = "none";
+        joinInput.style.display = "block";
+        joinInput.addEventListener("keyup", function (event) {
+            debugger;
+            connection.connect();
+        });
 
+        if(gameHash) {
+            startButton.style.display = "block";
+            that.writeLog("Players ready");
+            that.writeLog("Start the game!");
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
     };
 
 
@@ -128,14 +146,17 @@ var Game = function(canvas) {
      * Callback for starting the game
      */
     startGameCallback = function (event) {
+
         connection.msg('start');
+
         event.preventDefault();
         event.stopPropagation();
     };
 
 
-    createButton = document.getElementById('create');
-    joinButton = document.getElementById('join');
+    var createButton = document.getElementById('create'),
+    joinButton = document.getElementById('join'),
+    joinInput = document.getElementById("join-input");
     startButton = document.getElementById('start');
 
 
