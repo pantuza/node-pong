@@ -17,6 +17,9 @@ var Game = function(canvas) {
     /* Variable that identifies the current game */
     gameHash;
 
+    this.playerID;
+
+
     /*
      * Game initialization function. Construct all
      * game execution elements.
@@ -26,8 +29,6 @@ var Game = function(canvas) {
         if (!STARTED){
 
             window.canvasCtx = canvas.ctx;
-
-            logDiv = document.getElementById("log");
 
             canvas.setDimensions(500, 250);
             canvas.startObjectsOnCanvas();
@@ -50,7 +51,7 @@ var Game = function(canvas) {
      */
     beforeDraw = function() {
 
-        if (connection.playerElm.id == 'p1'){
+        if (that.playerID == 'p1'){
             connection.msg({p1: canvas.player1});
         } else {
             connection.msg({p2: canvas.player2});
@@ -103,10 +104,10 @@ var Game = function(canvas) {
      */
     createGameCallback = function (event) {
 
+        that.playerID = 'p1';
         connection.connect();
-        that.writeLog("Connected to the server")
 
-        gameHash = that.createAGameHash();
+        gameHash = createAGameHash();
         that.writeLog("Invite player to join using game Hash: " + gameHash);
 
         createButton.style.display = "none";
@@ -123,11 +124,11 @@ var Game = function(canvas) {
      */
     joinGameCallback = function (event) {
 
+        that.playerID = 'p2';
         joinButton.style.display = "none";
         createButton.style.display = "none";
         joinInput.style.display = "block";
         joinInput.addEventListener("keyup", function (event) {
-            debugger;
             connection.connect();
         });
 
@@ -155,8 +156,9 @@ var Game = function(canvas) {
 
 
     var createButton = document.getElementById('create'),
+    logDiv = document.getElementById("log"),
     joinButton = document.getElementById('join'),
-    joinInput = document.getElementById("join-input");
+    joinInput = document.getElementById("join-input"),
     startButton = document.getElementById('start');
 
 
