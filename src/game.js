@@ -84,5 +84,24 @@ var Game = function(canvas) {
     };
 
 
+    /**
+     * Creates a hash for a game identification. It gets a random number,
+     * converts it to a 36 radix string and returns its last 7 characters as
+     * this example: 2fz06wghkt9
+     */
+    createAGameHash = function () {
+
+        return Math.random().toString(36).substring(7);
+    };
+
+
+    startButton = document.getElementById('start');
+    startButton.addEventListener('click', function (event) {
+        connection.msg('start');
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+
     window.addEventListener('start', this.init, false);
 }
