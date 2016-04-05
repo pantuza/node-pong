@@ -9,12 +9,25 @@ var Game = function(canvas) {
     // controls setInterval
     INTERVAL_ID = 0,
 
+    /* Number of points to win the game */
+    MATCH_POINTS = 10,
+
     /* Log div */
     logDiv,
-
     that = this,
 
     scoreBoard,
+
+    scores = {
+        p1: {
+            board: document.getElementById("p1-score"),
+            points: 0
+        },
+        p2: {
+            board: document.getElementById("p2-score"),
+            points: 0
+        }
+    },
 
     /* Variable that identifies the current game */
     gameHash;
@@ -75,6 +88,55 @@ var Game = function(canvas) {
         logDiv.appendChild(content);
         logDiv.appendChild(lineBreak);
     }
+
+    /**
+     * Restarts the game
+     */
+    this.restart = function () {
+
+        clearInterval(INTERVAL_ID);
+        canvas.startObjectsOnCanvas();
+        INTERVAL_ID = setInterval(beforeDraw, 100);
+    };
+
+    /**
+     * Score points for a player
+     */
+    this.score = function (player) {
+
+        if (player == "p1") {
+            scores.p1.points++;
+            scores.p1.board.textContent = scores.p1.points;
+        } else {
+            scores.p2.points++;
+            scores.p2.board.textContent = scores.p2.points;
+        }
+
+        if(isThereAWinner()) {
+            this.endGame();
+        } else {
+            this.restart();
+        }
+    };
+
+
+    /**
+     * Checks if there is a Winner
+     */
+    isThereAWinner = function () {
+
+        if(scores.p1.points >= MATCH_POINTS) {
+
+            this.writeLog("Player 1 won the game!");
+            return true;
+        } else if(scores.p2.points >= MATCH_POINTS) {
+
+            this.writeLog("Player 2 won the game!");
+            return true;
+        }
+
+        return false;
+    };
 
     /*
      * Function to end the game
