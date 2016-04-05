@@ -146,7 +146,7 @@ var Canvas = function() {
 
       if (evt.pageY > canvasMinY && (evt.pageY + that.paddle_h) < canvasMaxY) {
 
-          if (connection.playerElm.id == 'p1')
+          if (game.playerID == 'p1')
               that.player1.y = parseInt(evt.pageY - canvasMinY);
           else
               that.player2.y = parseInt(evt.pageY - canvasMinY);
