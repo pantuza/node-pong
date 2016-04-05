@@ -14,6 +14,8 @@ var Game = function(canvas) {
 
     that = this,
 
+    scoreBoard,
+
     /* Variable that identifies the current game */
     gameHash;
 
@@ -35,6 +37,7 @@ var Game = function(canvas) {
 
             // Bind mousemove event to the onMouseMove function
             document.documentElement.onmousemove = canvas.onMouseMove;
+            scoreBoard.style.display = "block";
 
             // Create the beforeDraw function interval call
             INTERVAL_ID = setInterval(beforeDraw, 100);
@@ -155,17 +158,16 @@ var Game = function(canvas) {
     };
 
 
-    var createButton = document.getElementById('create'),
     logDiv = document.getElementById("log"),
+    createButton = document.getElementById('create'),
     joinButton = document.getElementById('join'),
     joinInput = document.getElementById("join-input"),
-    startButton = document.getElementById('start');
-
+    startButton = document.getElementById('start'),
+    scoreBoard = document.getElementById("scoreboard");
 
     createButton.addEventListener('click', createGameCallback, false);
     joinButton.addEventListener('click', joinGameCallback, false);
     startButton.addEventListener('click', startGameCallback, false);
-
 
     window.addEventListener('start', this.init, false);
 }
