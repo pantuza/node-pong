@@ -34,7 +34,7 @@ a:hover{
     right: 3px;
 }
 
-#users{
+#users {
     text-align: center;
     height:30px;
     line-height:30px;
@@ -46,18 +46,21 @@ a:hover{
     height: 30px;
     position: relative;
 }
-#users #p1{
+#create {
     float: left;
+	font-size: medium;
 }
-#users #p2{
+#join {
     float: right;
+	font-size: medium;
 }
 
-#start{
+#start {
     position: relative;
 	top: 25px;
 	text-decoration: none;
 	font-weight: bold;
+    display: none;
 	font-size: large;
 }
 #start:hover{
@@ -66,11 +69,12 @@ a:hover{
 
 h3{
 	color: teal;
-	top: 42px;
+	top: 20px;
 	position: relative;
-	font-weight: bold;
 	text-align: center;
 	z-index: 1;
+    font-size: xx-large;
+    font-family: monospace;
 }
 
 #log {
