@@ -82,3 +82,14 @@ h3{
     color: gray;
     margin-top: 5%;
 }
+
+#join-input {
+    display: none;
+    float: right;
+    border-style: dashed;
+    margin-top: 5px;
+    font-size: medium;
+    width: 35%;
+    background-color: #DDD;
+    text-align: center;
+}
