@@ -20,7 +20,7 @@
 Clone this project. Enter the directory and run:
 
 ```bash
-$> npm install
+$> make install
 ```
 
 ### RUNNING
