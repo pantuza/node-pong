@@ -12,7 +12,10 @@ var Game = function(canvas) {
     /* Log div */
     logDiv,
 
-    that = this;
+    that = this,
+
+    /* Variable that identifies the current game */
+    gameHash;
 
     /*
      * Game initialization function. Construct all
@@ -95,12 +98,50 @@ var Game = function(canvas) {
     };
 
 
-    startButton = document.getElementById('start');
-    startButton.addEventListener('click', function (event) {
+    /**
+     * Callback for creating a new game
+     */
+    createGameCallback = function (event) {
+
+        connection.connect();
+        that.writeLog("Connected to the server")
+
+        gameHash = that.createAGameHash();
+        that.writeLog("Invite player to join using game Hash: " + gameHash);
+
+        createButton.style.display = "none";
+        joinButton.style.display = "none";
+        startButton.style.display = "block";
+    };
+
+
+    /**
+     * Callback for joining an existing game
+     */
+    joinGameCallback = function (event) {
+
+
+    };
+
+
+    /**
+     * Callback for starting the game
+     */
+    startGameCallback = function (event) {
         connection.msg('start');
         event.preventDefault();
         event.stopPropagation();
-    });
+    };
+
+
+    createButton = document.getElementById('create');
+    joinButton = document.getElementById('join');
+    startButton = document.getElementById('start');
+
+
+    createButton.addEventListener('click', createGameCallback, false);
+    joinButton.addEventListener('click', joinGameCallback, false);
+    startButton.addEventListener('click', startGameCallback, false);
 
 
     window.addEventListener('start', this.init, false);
