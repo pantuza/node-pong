@@ -198,7 +198,7 @@ var Canvas = function() {
                 ballcanvasObj= -this.ball.dx;
 
             } else {
-                game.score('p2');
+                game.score('p1');
             }
 
         // If the next moviment of the ball is smaller than the paddle
@@ -208,7 +208,7 @@ var Canvas = function() {
             if (this.ball.y > this.player2.y && this.ball.y < this.player2.y + this.paddle_h) {
                 this.ball.dx = -this.ball.dx;
             } else {
-                game.score('p1');
+                game.score('p2');
             }
         }
 
