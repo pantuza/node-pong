@@ -96,7 +96,9 @@ var Game = function(canvas) {
 
         clearInterval(INTERVAL_ID);
         canvas.startObjectsOnCanvas();
-        INTERVAL_ID = setInterval(beforeDraw, 100);
+        setTimeout(function () {
+            INTERVAL_ID = setInterval(beforeDraw, 100);
+        }, 3000);
     };
 
     /**
