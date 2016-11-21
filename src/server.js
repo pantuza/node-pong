@@ -63,14 +63,16 @@ var Server = (function(){
             if (!player1) {
 
                 player1 = client;
+                player1.nodePongID = 1;
                 player1.on('message', msgFromPlayer);
                 player1.on('disconnect', onDisconnect);
-                console.log("player 1 Connected");
+                console.log("player 1 connected");
 
             // If not exists player 2, create it
             } else if (!player2) {
 
                 player2 = client;
+                player2.nodePongID = 2;
                 player2.on('message', msgFromPlayer);
                 player2.on('disconnect', onDisconnect);
                 console.log( "player 2 connected");
@@ -87,7 +89,13 @@ var Server = (function(){
          * since : 09.07.2011
          */
         onDisconnect = function () {
-            console.log('Server has disconnected');
+            console.log("Player " + this.nodePongID + " disconnected");
+
+            if(this.nodePongID === 1) {
+                player1 = null;
+            } else {
+                player2 = null;
+            }
         };
 
         /**
