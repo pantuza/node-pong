@@ -53,13 +53,13 @@ var Connection = function(game) {
 
             game.writeLog(data.erro);
         } else {
-            /* sets the other player positions on canvas */
-            if (game.playerID == 'p1') {
-
-                canvas.player2 = data.p2;
-            } else {
+            /* sets players positions on canvas */
+            if (data.hasOwnProperty('p1')) {
 
                 canvas.player1 = data.p1;
+            } else {
+
+                canvas.player2 = data.p2;
             }
         }
     },
