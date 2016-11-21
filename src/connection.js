@@ -52,6 +52,10 @@ var Connection = function(game) {
         } else if (data.erro) {
 
             game.writeLog(data.erro);
+        } else if (data === "stop") {
+
+            var stopEvent = new Event('stop');
+            window.dispatchEvent(stopEvent);
         } else {
             /* sets players positions on canvas */
             if (data.hasOwnProperty('p1')) {
