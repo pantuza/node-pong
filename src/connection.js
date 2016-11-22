@@ -56,6 +56,19 @@ var Connection = function(game) {
 
             var stopEvent = new Event('stop');
             window.dispatchEvent(stopEvent);
+
+        } else if (data.hasOwnProperty("type") && data.type == "CREATE_ROOM") {
+
+            if(data.hasOwnProperty("ack")) {
+                if(data.ack) {
+                    game.invite();
+                } else if(!data.ack) {
+                    game.cancelRoom();
+                }
+            } else {
+                throw Exception("Malformed message from server!");
+            }
+
         } else {
             /* sets players positions on canvas */
             if (data.hasOwnProperty('p1')) {
@@ -93,6 +106,14 @@ var Connection = function(game) {
         that.socket.on('disconnect', onDisconnectCallback);
 
         that.socket.connect();
+    };
+
+    /**
+     * Function to disconnect player from server
+     */
+    this.disconnect = function () {
+
+        that.socket.disconnect();
     };
 
 
