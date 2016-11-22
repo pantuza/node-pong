@@ -165,6 +165,27 @@ var Game = function(canvas) {
         return Math.random().toString(36).substring(7);
     };
 
+    /**
+     * Prints the hash to invite a friend to enter the game
+     */
+    this.invite = function () {
+
+        that.writeLog("Invite player to join using game Hash: " + gameHash);
+
+        createButton.style.display = "none";
+        joinButton.style.display = "none";
+        startButton.style.display = "block";
+
+    };
+
+    /**
+     * Cancels room creation
+     */
+    this.cancelRoom = function () {
+
+        game.writeLog("We could not create the room. Disconnecting..");
+        connection.disconnect();
+    };
 
     /**
      * Callback for creating a new game
@@ -175,11 +196,10 @@ var Game = function(canvas) {
         connection.connect();
 
         gameHash = createAGameHash();
-        that.writeLog("Invite player to join using game Hash: " + gameHash);
-
-        createButton.style.display = "none";
-        joinButton.style.display = "none";
-        startButton.style.display = "block";
+        connection.msg({
+            type: "CREATE_ROOM",
+            room: gameHash,
+        });
 
         event.preventDefault();
         event.stopPropagation();
