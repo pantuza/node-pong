@@ -6,6 +6,7 @@ var Server = (function(){
     var PORT = 3000,
 
         START_MSG = "start",
+        CREATE_ROOM = "CREATE_ROOM",
 
         express = require('express'),
         app = express(),
@@ -16,6 +17,9 @@ var Server = (function(){
         socket = undefined,
         player1 = undefined,
         player2 = undefined,
+
+        /* Keep all running games */
+        games = {},
 
         /**
          * Connection server answer
@@ -36,15 +40,39 @@ var Server = (function(){
             /* Send start message for all players */
             if (message == START_MSG) {
                 sendAll(message);
-                return;
+
+            }else if(message.hasOwnProperty("type") && message.type == CREATE_ROOM) {
+
+                if(message.hasOwnProperty("room")) {
+                    createRoom(message.room, player);
+                }
 
             } else if (player == player1.id) {
                 player2.send(message);
+
             } else {
                 player1.send(message);
             }
         },
 
+        /**
+         * Create a new game room
+         */
+        createRoom = function (room, player) {
+
+            var responseData = {
+                type: CREATE_ROOM,
+                ack: false,
+            };
+
+            if(!games.hasOwnProperty(room) && player1) {
+                responseData.ack = true;
+                player1.nodePongRoom = room;
+            }
+
+            /* Always who creates a room is the player1 */
+            player1.send(responseData);
+        }
 
         /*
          * Broadcast message to all clients
