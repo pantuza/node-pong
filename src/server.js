@@ -15,8 +15,12 @@ var Server = (function(){
 
         server = undefined,
         socket = undefined,
+
         player1 = undefined,
         player2 = undefined,
+
+        /* keep all connected players */
+        players = [],
 
         /* Keep all running games */
         games = {},
@@ -44,7 +48,7 @@ var Server = (function(){
             }else if(message.hasOwnProperty("type") && message.type == CREATE_ROOM) {
 
                 if(message.hasOwnProperty("room")) {
-                    createRoom(message.room, player);
+                    createRoom(message.room, this);
                 }
 
             } else if (player == player1.id) {
@@ -65,13 +69,17 @@ var Server = (function(){
                 ack: false,
             };
 
-            if(!games.hasOwnProperty(room) && player1) {
+            if(!games.hasOwnProperty(room) && knownClient(player)) {
+                games[room] = {
+                    player1: player,
+                    player2: null,
+                };
+
                 responseData.ack = true;
-                player1.nodePongRoom = room;
+                player.nodePongRoom = room;
             }
 
-            /* Always who creates a room is the player1 */
-            player1.send(responseData);
+            player.send(responseData);
         }
 
         /*
@@ -83,31 +91,33 @@ var Server = (function(){
         },
 
         /**
+         * Checks if the client is already in the players list
+         */
+        knownClient = function (client) {
+
+            for(var i=0; i < players.length; i++) {
+
+                if(players[i].id === client.id) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /**
          * Client connection callback
          */
         onConnectionCallback = function (client) {
 
-            // If not exists a player 1, create it
-            if (!player1) {
 
-                player1 = client;
-                player1.nodePongID = 1;
-                player1.on('message', msgFromPlayer);
-                player1.on('disconnect', onDisconnect);
-                console.log("player 1 connected");
+            if(!knownClient(client)) {
 
-            // If not exists player 2, create it
-            } else if (!player2) {
+                client.on('message', msgFromPlayer);
+                client.on('disconnect', onDisconnect);
 
-                player2 = client;
-                player2.nodePongID = 2;
-                player2.on('message', msgFromPlayer);
-                player2.on('disconnect', onDisconnect);
-                console.log( "player 2 connected");
-
-            // Otherwise, notify client that there are too many user to play
-            } else {
-                client.send({erro:'Too many Users :/'});
+                players.push(client);
+                console.log("player " + client.id + " connected");
             }
         },
 
