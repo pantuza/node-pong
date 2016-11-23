@@ -188,12 +188,25 @@ var Game = function(canvas) {
     };
 
     /**
-     * Callback for creating a new game
+     * Connect button callback
      */
-    createGameCallback = function (event) {
+    connectOnServerCallback = function (event) {
 
         that.playerID = 'p1';
         connection.connect();
+
+        connectButton.style.display = "none";
+        createButton.style.display = "block";
+        joinButton.style.display = "block";
+
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
+    /**
+     * Callback for creating a new game
+     */
+    createGameCallback = function (event) {
 
         gameHash = createAGameHash();
         connection.msg({
@@ -242,6 +255,7 @@ var Game = function(canvas) {
     };
 
 
+    connectButton = document.getElementById("connect");
     logDiv = document.getElementById("log"),
     createButton = document.getElementById('create'),
     joinButton = document.getElementById('join'),
@@ -249,6 +263,7 @@ var Game = function(canvas) {
     startButton = document.getElementById('start'),
     scoreBoard = document.getElementById("scoreboard");
 
+    connectButton.addEventListener('click', connectOnServerCallback, false);
     createButton.addEventListener('click', createGameCallback, false);
     joinButton.addEventListener('click', joinGameCallback, false);
     startButton.addEventListener('click', startGameCallback, false);
