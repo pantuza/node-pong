@@ -188,6 +188,23 @@ var Game = function(canvas) {
     };
 
     /**
+     * Wait for game to start
+     */
+    this.waitForStart = function () {
+
+        game.writeLog("Wait for game to start..");
+    };
+
+    /**
+     * Can not join room
+     */
+    this.cannotjoinRoom = function () {
+
+        game.writeLog("We could not join this room. Check if the hash is ok");
+        joinInput.value = "";
+    };
+
+    /**
      * Connect button callback
      */
     connectOnServerCallback = function (event) {
@@ -228,15 +245,18 @@ var Game = function(canvas) {
         joinButton.style.display = "none";
         createButton.style.display = "none";
         joinInput.style.display = "block";
-        joinInput.addEventListener("keyup", function (event) {
-            connection.connect();
-        });
 
-        if(gameHash) {
-            startButton.style.display = "block";
-            that.writeLog("Players ready");
-            that.writeLog("Start the game!");
-        }
+        joinInput.addEventListener("keyup", function (event) {
+
+            if(typeof this.value === "string" && this.value.length > 0) {
+
+                gameHash = this.value;
+                connection.msg({
+                    type: "JOIN_ROOM",
+                    room: gameHash,
+                });
+            }
+        });
 
         event.preventDefault();
         event.stopPropagation();
@@ -248,7 +268,10 @@ var Game = function(canvas) {
      */
     startGameCallback = function (event) {
 
-        connection.msg('start');
+        connection.msg({
+            type: "GAME_START",
+            room: gameHash,
+        });
 
         event.preventDefault();
         event.stopPropagation();
