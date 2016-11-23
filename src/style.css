@@ -49,10 +49,12 @@ a:hover{
 #create {
     float: left;
 	font-size: medium;
+    display: none;
 }
 #join {
     float: right;
 	font-size: medium;
+    display: none;
 }
 
 #start {
@@ -63,7 +65,16 @@ a:hover{
     display: none;
 	font-size: large;
 }
-#start:hover{
+
+#connect {
+    position: relative;
+	top: 25px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: large;
+}
+
+#start,#connect:hover{
 	text-decoration: underline;
 }
 
