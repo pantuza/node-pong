@@ -42,7 +42,7 @@ var Connection = function(game) {
     onMessageCallback = function(data) {
 
         /* Triggers the start event to begin the game */
-        if (data === 'start') {
+        if (data.hasOwnProperty("type") && data.type == "GAME_START") {
 
             h3.textContent = "The best player win!";
 
@@ -68,6 +68,19 @@ var Connection = function(game) {
             } else {
                 throw Exception("Malformed message from server!");
             }
+
+        } else if (data.hasOwnProperty("type") && data.type == "JOIN_ROOM") {
+
+            if(data.hasOwnProperty("ack")) {
+                if(data.ack) {
+                    game.waitForStart();
+                } else if(!data.ack) {
+                    game.cannotjoinRoom();
+                }
+            } else {
+                throw Exception("Malformed message from server!");
+            }
+
 
         } else {
             /* sets players positions on canvas */
