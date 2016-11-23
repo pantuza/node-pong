@@ -5,8 +5,9 @@ var Server = (function(){
 
     var PORT = 3000,
 
-        START_MSG = "start",
+        START_MSG = "GAME_START",
         CREATE_ROOM = "CREATE_ROOM",
+        JOIN_ROOM = "JOIN_ROOM",
 
         express = require('express'),
         app = express(),
@@ -42,13 +43,23 @@ var Server = (function(){
         msgFromPlayer = function(message, player) {
 
             /* Send start message for all players */
-            if (message == START_MSG) {
-                sendAll(message);
+            if (message.hasOwnProperty("type") && message.type == START_MSG) {
+                if(message.hasOwnProperty("room")) {
+                    if(games[message.room].player1 && games[message.room].player2) {
+                        sendAll(message);
+                    }
+                }
 
-            }else if(message.hasOwnProperty("type") && message.type == CREATE_ROOM) {
+            } else if(message.hasOwnProperty("type") && message.type == CREATE_ROOM) {
 
                 if(message.hasOwnProperty("room")) {
                     createRoom(message.room, this);
+                }
+
+            } else if(message.hasOwnProperty("type") && message.type == JOIN_ROOM) {
+
+                if(message.hasOwnProperty("room")) {
+                    joinRoom(message.room, this);
                 }
 
             } else if (player == player1.id) {
@@ -82,12 +93,33 @@ var Server = (function(){
             player.send(responseData);
         }
 
+        /**
+         * Join an existing room
+         */
+        joinRoom = function (room, player) {
+
+            var responseData = {
+                type: JOIN_ROOM,
+                ack: false,
+            }
+
+            if(games.hasOwnProperty(room) && knownClient(player)) {
+
+                games[room].player2 = player;
+                responseData.ack = true;
+                player.nodePongRoom = room;
+            }
+
+            player.send(responseData);
+        }
+
         /*
          * Broadcast message to all clients
          */
         sendAll = function (msg){
-            player1.send(msg);
-            player2.send(msg);
+
+            games[msg.room].player1.send(msg);
+            games[msg.room].player2.send(msg);
         },
 
         /**
@@ -127,9 +159,9 @@ var Server = (function(){
          * since : 09.07.2011
          */
         onDisconnect = function () {
-            console.log("Player " + this.nodePongID + " disconnected");
+            console.log("Player " + this.id + " disconnected");
 
-            if(this.nodePongID === 1) {
+            if(this.id === 1) {
                 player1 = null;
             } else {
                 player2 = null;
