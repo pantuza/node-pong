@@ -8,6 +8,8 @@ var Server = (function(){
         START_MSG = "GAME_START",
         CREATE_ROOM = "CREATE_ROOM",
         JOIN_ROOM = "JOIN_ROOM",
+        LEAVE_ROOM = "LEAVE_ROOM",
+        POSITION = "POSITION",
 
         express = require('express'),
         app = express(),
@@ -42,31 +44,47 @@ var Server = (function(){
          */
         msgFromPlayer = function(message, player) {
 
-            /* Send start message for all players */
-            if (message.hasOwnProperty("type") && message.type == START_MSG) {
-                if(message.hasOwnProperty("room")) {
-                    if(games[message.room].player1 && games[message.room].player2) {
-                        sendAll(message);
-                    }
+            if (message.hasOwnProperty("type")) {
+
+                switch (message.type) {
+
+                    case START_MSG:
+                        if(message.hasOwnProperty("room")) {
+                            startGameAtRoom(message);
+                        }
+                        break;
+
+                    case CREATE_ROOM:
+                        if(message.hasOwnProperty("room")) {
+                            createRoom(message.room, this);
+                        }
+                        break;
+
+                    case JOIN_ROOM:
+                        if(message.hasOwnProperty("room")) {
+                            joinRoom(message.room, this);
+                        }
+                        break;
+
+                    case POSITION:
+                        if(message.hasOwnProperty("position")) {
+                            sendPosition(message, this);
+                        }
+                        break;
+                    default:
+                        console.error("Unrecognized message: " + message);
+                        break;
                 }
+            }
+        },
 
-            } else if(message.hasOwnProperty("type") && message.type == CREATE_ROOM) {
+        /**
+         * Starts the game at room sending the start message to all players
+         */
+        startGameAtRoom = function (message) {
 
-                if(message.hasOwnProperty("room")) {
-                    createRoom(message.room, this);
-                }
-
-            } else if(message.hasOwnProperty("type") && message.type == JOIN_ROOM) {
-
-                if(message.hasOwnProperty("room")) {
-                    joinRoom(message.room, this);
-                }
-
-            } else if (player == player1.id) {
-                player2.send(message);
-
-            } else {
-                player1.send(message);
+            if(roomHasPlayers(message.room)) {
+                sendAll(message);
             }
         },
 
@@ -91,7 +109,7 @@ var Server = (function(){
             }
 
             player.send(responseData);
-        }
+        },
 
         /**
          * Join an existing room
@@ -111,7 +129,44 @@ var Server = (function(){
             }
 
             player.send(responseData);
-        }
+        },
+
+        /**
+         * Checks if room has all users to continue a game
+         */
+        roomHasPlayers = function (room) {
+
+            if(typeof room !== "string") {
+                console.error("Wrong type for parameter room. Must be string");
+            }
+
+            if(games.hasOwnProperty(room)) {
+                if(games[room].player1 && games[room].player2) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
+         * Sends positions of one player to another
+         */
+        sendPosition = function (message, player) {
+
+            var room = this.nodePongRoom;
+            if(games.hasOwnProperty(room)) {
+
+                if(roomHasPlayers(room)) {
+
+                    var currentPlayer = games[room].player1;
+                    if(games[room].player2 == player) {
+                        currentPlayer = games[room].player2;
+                    }
+
+                    currentPlayer.send(message);
+                }
+            }
+        },
 
         /*
          * Broadcast message to all clients
@@ -135,13 +190,54 @@ var Server = (function(){
             }
 
             return false;
-        }
+        },
+
+        /**
+         * Remove player from room
+         */
+        leaveRoom = function (room) {
+
+            if(games.hasOwnProperty(room)) {
+
+                if(games[room].player1 == this) {
+
+                    games[room].player1 = null;
+                    if(games[room].player2) {
+                        games[room].player2.send({
+                            type: LEAVE_ROOM,
+                        });
+                    }
+
+                } else if(games[room].player2 == this) {
+
+                    games[room].player2 = null;
+                    if(games[room].player1) {
+                        games[room].player1.send({
+                            type: LEAVE_ROOM,
+                        });
+                    }
+                }
+            }
+        },
+
+        /**
+         * Remove player from players list
+         */
+        removePlayerSocket = function (player) {
+
+            var playerIndex = players.indexOf(player);
+
+            if(playerIndex) {
+                 players.splice(playerIndex, 1);
+            } else {
+                console.log("Player not found in players list");
+            }
+        },
 
         /**
          * Client connection callback
          */
         onConnectionCallback = function (client) {
-
 
             if(!knownClient(client)) {
 
@@ -153,19 +249,17 @@ var Server = (function(){
             }
         },
 
-        /*
+        /**
          * When user disconnects, it sends a notification
          * author: Gustavo Pantuza
          * since : 09.07.2011
          */
         onDisconnect = function () {
-            console.log("Player " + this.id + " disconnected");
 
-            if(this.id === 1) {
-                player1 = null;
-            } else {
-                player2 = null;
-            }
+            removePlayerSocket(this);
+            leaveRoom(this.nodePongRoom);
+
+            console.log("Player " + this.id + " disconnected");
         };
 
         /**
