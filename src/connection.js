@@ -81,7 +81,9 @@ var Connection = function(game) {
                 throw Exception("Malformed message from server!");
             }
 
+        } else if (data.hasOwnProperty("type") && data.type == "LEAVE_ROOM") {
 
+            game.playerExitedTheGame();
         } else {
             /* sets players positions on canvas */
             if (data.hasOwnProperty('p1')) {
