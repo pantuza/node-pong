@@ -85,6 +85,7 @@ var Server = (function(){
 
             if(roomHasPlayers(message.room)) {
                 sendAll(message);
+                console.log("Started game room " + message.room);
             }
         },
 
@@ -257,9 +258,9 @@ var Server = (function(){
         onDisconnect = function () {
 
             removePlayerSocket(this);
-            leaveRoom(this.nodePongRoom);
-
             console.log("Player " + this.id + " disconnected");
+            leaveRoom(this.nodePongRoom);
+            console.log("Stopped game room " + this.nodePongRoom);
         };
 
         /**
