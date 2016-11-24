@@ -67,11 +67,16 @@ var Game = function(canvas) {
      */
     beforeDraw = function() {
 
-        if (that.playerID == 'p1'){
-            connection.msg({p1: canvas.player1});
-        } else {
-            connection.msg({p2: canvas.player2});
+        var position = canvas.player1;
+
+        if (that.playerID == 'p2'){
+            position = canvas.player2;
         }
+
+        connection.msg({
+            type: "POSITION",
+            position: position,
+        });
 
         canvas.draw();
     },
@@ -150,10 +155,25 @@ var Game = function(canvas) {
             clearInterval(INTERVAL_ID);
 
             that.writeLog("End of the game");
-            connection.socket.disconnect();
+            connection.disconnect();
         }
     };
 
+    /**
+     * Player exited the game. We must stop too.
+     */
+    this.playerExitedTheGame = function () {
+
+        this.endGame();
+
+        if(scores.p1.points > scores.p2.points) {
+            this.writeLog("Player 1 won the game!");
+        } else if(scores.p1.points < scores.p2.points) {
+            this.writeLog("Player 2 won the game!");
+        } else {
+            this.writeLog("Game tied");
+        }
+    };
 
     /**
      * Creates a hash for a game identification. It gets a random number,
