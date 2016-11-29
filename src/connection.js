@@ -89,9 +89,13 @@ var Connection = function(game) {
             if (data.hasOwnProperty('p1')) {
 
                 canvas.player1 = data.p1;
+                canvas.ball.x = data.p1.ball.x + canvas.ball.x / 2;
+                canvas.ball.y = canvas.p1.ball.y + canvas.ball.y / 2;
             } else {
 
                 canvas.player2 = data.p2;
+                canvas.ball.x = data.p2.ball.x + canvas.ball.x / 2;
+                canvas.ball.y = data.p2.ball.y + canvas.ball.y / 2;
             }
         }
     },
