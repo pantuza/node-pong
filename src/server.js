@@ -241,7 +241,8 @@ var Server = (function(){
             var playerIndex = players.indexOf(player);
 
             if(playerIndex) {
-                 players.splice(playerIndex, 1);
+                console.log("Removing player " + player.id + " socket");
+                players.splice(playerIndex, 1);
             } else {
                 console.log("Player not found in players list");
             }
@@ -258,7 +259,7 @@ var Server = (function(){
                 client.on('disconnect', onDisconnect);
 
                 players.push(client);
-                console.log("player " + client.id + " connected");
+                console.log("Player " + client.id + " connected");
             }
         },
 
