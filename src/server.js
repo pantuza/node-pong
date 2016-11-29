@@ -160,17 +160,17 @@ var Server = (function(){
          */
         sendPosition = function (message, player) {
 
-            var room = this.nodePongRoom;
+            var room = player.nodePongRoom;
             if(games.hasOwnProperty(room)) {
 
                 if(roomHasPlayers(room)) {
 
-                    var currentPlayer = games[room].player1;
+                    var opponent = games[room].player2;
                     if(games[room].player2 == player) {
-                        currentPlayer = games[room].player2;
+                        opponent = games[room].player1;
                     }
 
-                    currentPlayer.send(message);
+                    opponent.send(message);
                 }
             }
         },
