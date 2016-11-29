@@ -76,6 +76,7 @@ var Game = function(canvas) {
         connection.msg({
             type: "POSITION",
             position: position,
+            ball: canvas.ball,
         });
 
         canvas.draw();
