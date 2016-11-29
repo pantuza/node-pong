@@ -9,6 +9,9 @@ var Game = function(canvas) {
     // controls setInterval
     INTERVAL_ID = 0,
 
+    // Time to send data to server inside interval (miliseconds)
+    UPDATE_TIMES_INTERVAL = 100,
+
     /* Number of points to win the game */
     MATCH_POINTS = 10,
 
@@ -53,7 +56,7 @@ var Game = function(canvas) {
             scoreBoard.style.display = "block";
 
             // Create the beforeDraw function interval call
-            INTERVAL_ID = setInterval(beforeDraw, 100);
+            INTERVAL_ID = setInterval(beforeDraw, UPDATE_TIMES_INTERVAL);
             STARTED = true;
             that.writeLog("Game started");
 
