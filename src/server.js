@@ -85,7 +85,7 @@ var Server = (function(){
 
             if(roomHasPlayers(message.room)) {
                 sendAll(message);
-                console.log("Started game room " + message.room);
+                console.log("Started game room: " + message.room);
             }
         },
 
@@ -109,6 +109,9 @@ var Server = (function(){
                 player.nodePongRoom = room;
             }
 
+            if(responseData.ack) {
+                console.log("Created game room: " + room);
+            }
             player.send(responseData);
         },
 
@@ -129,6 +132,9 @@ var Server = (function(){
                 player.nodePongRoom = room;
             }
 
+            if(responseData.ack) {
+                console.log("Player " + player.id + " joined room " + room);
+            }
             player.send(responseData);
         },
 
@@ -173,6 +179,12 @@ var Server = (function(){
          * Broadcast message to all clients
          */
         sendAll = function (msg){
+
+            console.log(
+                "Multicasting message: " + msg.type + " to users [" +
+                games[msg.room].player1.id + ", " +
+                games[msg.room].player2.id + "]"
+            );
 
             games[msg.room].player1.send(msg);
             games[msg.room].player2.send(msg);
