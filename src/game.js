@@ -115,12 +115,35 @@ var Game = function(canvas) {
      */
     this.score = function (player) {
 
-        if (player == "p1") {
-            scores.p1.points++;
+        var me = false,
+            data = {
+                type: "SCORE",
+                me: me,
+        };
+
+        if(that.playerID == player) {
+            me = true;
+        }
+
+        connection.msg(data);
+    };
+
+    /**
+     * Updates the game score board based on server message
+     */
+    this.updateScoreBoard = function (data) {
+
+        console.log(data);
+        if (that.playerID == "p1") {
+            scores.p1.points = data.mine;
             scores.p1.board.textContent = scores.p1.points;
-        } else {
-            scores.p2.points++;
+            scores.p2.points = data.opponent;
             scores.p2.board.textContent = scores.p2.points;
+        } else {
+            scores.p2.points = data.mine;
+            scores.p2.board.textContent = scores.p2.points;
+            scores.p1.points = data.opponent;
+            scores.p1.board.textContent = scores.p1.points;
         }
 
         if(isThereAWinner()) {
@@ -128,8 +151,7 @@ var Game = function(canvas) {
         } else {
             this.restart();
         }
-    };
-
+    },
 
     /**
      * Checks if there is a Winner
@@ -138,11 +160,11 @@ var Game = function(canvas) {
 
         if(scores.p1.points >= MATCH_POINTS) {
 
-            this.writeLog("Player 1 won the game!");
+            that.writeLog("Player 1 won the game!");
             return true;
         } else if(scores.p2.points >= MATCH_POINTS) {
 
-            this.writeLog("Player 2 won the game!");
+            that.writeLog("Player 2 won the game!");
             return true;
         }
 
