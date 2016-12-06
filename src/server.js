@@ -10,6 +10,7 @@ var Server = (function(){
         JOIN_ROOM = "JOIN_ROOM",
         LEAVE_ROOM = "LEAVE_ROOM",
         POSITION = "POSITION",
+        SCORE = "SCORE",
 
         express = require('express'),
         app = express(),
@@ -18,9 +19,6 @@ var Server = (function(){
 
         server = undefined,
         socket = undefined,
-
-        player1 = undefined,
-        player2 = undefined,
 
         /* keep all connected players */
         players = [],
@@ -71,6 +69,13 @@ var Server = (function(){
                             sendPosition(message, this);
                         }
                         break;
+
+                    case SCORE:
+                        if(message.hasOwnProperty("me")) {
+                            playerScore(message, this);
+                        }
+                        break;
+
                     default:
                         console.error("Unrecognized message: " + message);
                         break;
@@ -103,10 +108,15 @@ var Server = (function(){
                 games[room] = {
                     player1: player,
                     player2: null,
+                    scoreTransaction: {
+                        onGoing: false,
+                        playerID: null,
+                    },
                 };
 
                 responseData.ack = true;
                 player.nodePongRoom = room;
+                player.nodePongScore = 0;
             }
 
             if(responseData.ack) {
@@ -130,6 +140,7 @@ var Server = (function(){
                 games[room].player2 = player;
                 responseData.ack = true;
                 player.nodePongRoom = room;
+                player.nodePongScore = 0;
             }
 
             if(responseData.ack) {
@@ -171,6 +182,75 @@ var Server = (function(){
                     }
 
                     opponent.send(message);
+                }
+            }
+        },
+
+        /**
+         * Set or update player score using a transaction
+         */
+        playerScore = function (msg, player) {
+
+            var room = player.nodePongRoom;
+            if(games.hasOwnProperty(room)) {
+
+                if(roomHasPlayers(room)) {
+
+                    var opponent = games[room].player2;
+                    if(games[room].player2 == player) {
+                        opponent = games[room].player1;
+                    }
+                    console.log("me: " + player.id);
+                    console.log("opponent: " + opponent.id);
+
+                    var transaction = games[room].scoreTransaction;
+                    if(transaction.onGoing) {
+                        if(msg.me) {
+                            if(player.id == transaction.playerID) {
+                                player.nodePongScore++;
+                            }
+                        } else {
+                            if(opponent.id == transaction.playerID) {
+                                opponent.nodePongScore++;
+                            }
+                        }
+
+                        player.send({
+                            type: SCORE,
+                            mine: player.nodePongScore,
+                            opponent: opponent.nodePongScore,
+                        });
+
+                        opponent.send({
+                            type: SCORE,
+                            mine: opponent.nodePongScore,
+                            opponent: player.nodePongScore,
+                        });
+
+                        transaction.onGoing = false;
+                        transaction.playerID = null;
+
+                    } else {
+                        transaction.onGoing = true;
+                        if(msg.me) {
+                            transaction.playerID = player.id;
+                        } else {
+                            transaction.playerID = opponent.id;
+                        }
+
+                        /**
+                         * We just have started a transaction. 1.5 seconds
+                         * counting from now, if the transaction do not end
+                         * we stop it.
+                         */
+                        setTimeout(function () {
+
+                            if(transaction.onGoing) {
+                                transaction.onGoing = false;
+                                transaction.playerID = null;
+                            }
+                        }, 1500);
+                    }
                 }
             }
         },
