@@ -23,7 +23,6 @@ var Connection = function(game) {
     this.msg = function (message) {
 
           this.socket.send(message, game.playerID);
-          console.log("Send: " + dir(message));
     },
 
 
@@ -41,7 +40,6 @@ var Connection = function(game) {
      */
     onMessageCallback = function(data) {
 
-        console.log("Receive: " + dir(data));
         /* Triggers the start event to begin the game */
         if (data.hasOwnProperty("type") && data.type == "GAME_START") {
 
@@ -85,6 +83,11 @@ var Connection = function(game) {
         } else if (data.hasOwnProperty("type") && data.type == "LEAVE_ROOM") {
 
             game.playerExitedTheGame();
+
+        } else if (data.hasOwnProperty("type") && data.type == "SCORE") {
+
+            game.updateScoreBoard(data);
+
         } else {
             /* sets players positions on canvas */
             if(game.playerID == "p1") {
