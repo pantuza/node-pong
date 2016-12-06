@@ -103,8 +103,8 @@ var Canvas = function() {
     _setPaddles = function () {
 
         // Put paddles on the abscissa: 5 px left, -5 px right
-        that.player1.x = _canvasObj.width -5;
-        that.player2.x = 2;
+        that.player1.x = 2;
+        that.player2.x = _canvasObj.width -5;
         // Put paddles on the ordinate: vertically centralized
         that.player1.y = that.player2.y = (_canvasObj.height /2)-(that.paddle_h/2);
     },
@@ -198,7 +198,7 @@ var Canvas = function() {
                 ballcanvasObj= -this.ball.dx;
 
             } else {
-                game.score('p1');
+                game.score('p2');
             }
 
         // If the next moviment of the ball is smaller than the paddle
@@ -208,7 +208,7 @@ var Canvas = function() {
             if (this.ball.y > this.player2.y && this.ball.y < this.player2.y + this.paddle_h) {
                 this.ball.dx = -this.ball.dx;
             } else {
-                game.score('p2');
+                game.score('p1');
             }
         }
 
