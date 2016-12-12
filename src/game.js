@@ -46,6 +46,7 @@ var Game = function(canvas) {
         // Start the game
         if (!STARTED){
 
+            h3.textContent = "The best player win!";
             window.canvasCtx = canvas.ctx;
 
             canvas.setDimensions(500, 250);
@@ -331,6 +332,8 @@ var Game = function(canvas) {
     joinInput = document.getElementById("join-input"),
     startButton = document.getElementById('start'),
     scoreBoard = document.getElementById("scoreboard");
+    h3 = document.getElementById('canvas_header');
+
 
     connectButton.addEventListener('click', connectOnServerCallback, false);
     createButton.addEventListener('click', createGameCallback, false);

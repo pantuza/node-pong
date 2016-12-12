@@ -10,8 +10,6 @@ var Connection = function(game) {
     // loop index
     i = 0,
 
-    h3 = undefined,
-
     that = this;
 
     this.socket = undefined;
@@ -45,8 +43,6 @@ var Connection = function(game) {
             switch (data.type) {
 
                 case "GAME_START":
-                    h3.textContent = "The best player win!";
-
                     var startEvent = new Event('start');
                     window.dispatchEvent(startEvent);
                     break;
@@ -144,6 +140,4 @@ var Connection = function(game) {
         that.socket.disconnect();
     };
 
-
-    h3 = document.getElementById('canvas_header');
 };
