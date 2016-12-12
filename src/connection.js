@@ -40,64 +40,72 @@ var Connection = function(game) {
      */
     onMessageCallback = function(data) {
 
-        /* Triggers the start event to begin the game */
-        if (data.hasOwnProperty("type") && data.type == "GAME_START") {
+        if (data.hasOwnProperty("type")) {
 
-            h3.textContent = "The best player win!";
+            switch (data.type) {
 
-            var startEvent = new Event('start');
-            window.dispatchEvent(startEvent);
+                case "GAME_START":
+                    h3.textContent = "The best player win!";
 
-        } else if (data.erro) {
+                    var startEvent = new Event('start');
+                    window.dispatchEvent(startEvent);
+                    break;
 
-            game.writeLog(data.erro);
-        } else if (data === "stop") {
+                case "ERROR":
+                    game.writeLog(data.error);
 
-            var stopEvent = new Event('stop');
-            window.dispatchEvent(stopEvent);
+                case "GAME_STOP":
+                    var stopEvent = new Event('stop');
+                    window.dispatchEvent(stopEvent);
+                    break;
 
-        } else if (data.hasOwnProperty("type") && data.type == "CREATE_ROOM") {
+                case "CREATE_ROOM":
+                    if(data.hasOwnProperty("ack")) {
+                        if(data.ack) {
+                            game.invite();
+                        } else if(!data.ack) {
+                            game.cancelRoom();
+                        }
+                    } else {
+                        throw Exception("Malformed message from server!");
+                    }
+                    break;
 
-            if(data.hasOwnProperty("ack")) {
-                if(data.ack) {
-                    game.invite();
-                } else if(!data.ack) {
-                    game.cancelRoom();
-                }
-            } else {
-                throw Exception("Malformed message from server!");
+                case "JOIN_ROOM":
+                    if(data.hasOwnProperty("ack")) {
+                        if(data.ack) {
+                            game.waitForStart();
+                        } else if(!data.ack) {
+                            game.cannotjoinRoom();
+                        }
+                    } else {
+                        throw Exception("Malformed message from server!");
+                    }
+                    break;
+
+                case "LEAVE_ROOM":
+                    game.playerExitedTheGame();
+                    break;
+
+                case "SCORE":
+                    game.updateScoreBoard(data);
+                    break;
+
+                case "POSITION":
+                    /* sets players positions on canvas */
+                    if(game.playerID == "p1") {
+                        canvas.player2 = data.position;
+                    } else {
+                        canvas.player1 = data.position;
+                    }
+
+                    canvas.ball.x = parseInt((data.ball.x + canvas.ball.x) / 2, 10);
+                    canvas.ball.y = parseInt((data.ball.y + canvas.ball.y) / 2, 10);
+                    break;
+                default:
+                    game.writeLog(data);
+                    break;
             }
-
-        } else if (data.hasOwnProperty("type") && data.type == "JOIN_ROOM") {
-
-            if(data.hasOwnProperty("ack")) {
-                if(data.ack) {
-                    game.waitForStart();
-                } else if(!data.ack) {
-                    game.cannotjoinRoom();
-                }
-            } else {
-                throw Exception("Malformed message from server!");
-            }
-
-        } else if (data.hasOwnProperty("type") && data.type == "LEAVE_ROOM") {
-
-            game.playerExitedTheGame();
-
-        } else if (data.hasOwnProperty("type") && data.type == "SCORE") {
-
-            game.updateScoreBoard(data);
-
-        } else {
-            /* sets players positions on canvas */
-            if(game.playerID == "p1") {
-                canvas.player2 = data.position;
-            } else {
-                canvas.player1 = data.position;
-            }
-
-            canvas.ball.x = parseInt((data.ball.x + canvas.ball.x) / 2, 10);
-            canvas.ball.y = parseInt((data.ball.y + canvas.ball.y) / 2, 10);
         }
     },
 
