@@ -17,9 +17,6 @@ var Server = (function(){
         http = require('http').Server(app),
         io = require('socket.io')(http),
 
-        server = undefined,
-        socket = undefined,
-
         /* keep all connected players */
         players = [],
 
@@ -345,8 +342,6 @@ var Server = (function(){
 
         /**
          * When user disconnects, it sends a notification
-         * author: Gustavo Pantuza
-         * since : 09.07.2011
          */
         onDisconnect = function () {
 
@@ -361,12 +356,9 @@ var Server = (function(){
          */
         (function() {
 
-            // Start the server
-            //server = http.createServer(serverAnswer);
             app.get("/", serverAnswer);
             app.use(express.static(__dirname + "/"));
 
-            //server.listen(PORT); // Define socket port to listen
             http.listen(PORT, function () {
                 console.log([
                     "Node-Pong listening on port ", PORT,
@@ -376,8 +368,6 @@ var Server = (function(){
                 ].join(""));
             });
 
-            // Instantiate socket.io using the created server
-            //socket = io.listen(http);
             io.on('connection', onConnectionCallback);
 
         })();
