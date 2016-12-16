@@ -7,9 +7,6 @@ var Connection = function(game) {
 
     PORT = 3000,
 
-    // loop index
-    i = 0,
-
     that = this;
 
     this.socket = undefined;
