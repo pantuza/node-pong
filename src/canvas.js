@@ -189,24 +189,29 @@ var Canvas = function() {
             this.ball.dy = -this.ball.dy;
         }
 
-        // If the ball is going to pass the game area
-        if (this.ball.x + this.ball.dx + this.paddle_w + 5 > WIDTH) {
+        // ball next position
+        var ballNextPos = this.ball.x + this.ball.dx;
+
+        // If the ball is going to pass the game area by right side
+        if (ballNextPos + this.paddle_w + 5 > WIDTH) {
+            console.log("ball: "+ (ballNextPos + this.paddle_w + 5) + " > " + WIDTH);
 
             // Inverts the ball displacement on abscissas
             // if the ball collided with the paddle
-            if (this.ball.y > this.player1.y && this.ball.y < this.player1.y + this.paddle_h) {
-                ballcanvasObj= -this.ball.dx;
+            if (this.ball.y > this.player1.y && this.ball.y < (this.player1.y + this.paddle_h)) {
+                this.ball.dx = -this.ball.dx;
 
             } else {
                 game.score('p2');
             }
 
-        // If the next moviment of the ball is smaller than the paddle
-        }else if (this.ball.x + this.ball.dx < this.paddle_w + 5){
+        // If the next moviment of the ball is smaller than game area by left
+        }else if (ballNextPos < this.paddle_w + 5){
 
             // Inverts the ball displacement if it collided with the paddle
-            if (this.ball.y > this.player2.y && this.ball.y < this.player2.y + this.paddle_h) {
+            if (this.ball.y > this.player2.y && this.ball.y < (this.player2.y + this.paddle_h)) {
                 this.ball.dx = -this.ball.dx;
+
             } else {
                 game.score('p1');
             }
