@@ -166,7 +166,7 @@ var Server = (function(){
         /**
          * Notifies opponent with message
          */
-        notifyOpponent = function (room, player) {
+        notifyOpponent = function (room, player, message) {
 
             var opponent = games[room].player2;
             if(games[room].player2 == player) {
@@ -185,7 +185,7 @@ var Server = (function(){
             if(games.hasOwnProperty(room)) {
 
                 if(roomHasPlayers(room)) {
-                    notifyOpponent(room, player);
+                    notifyOpponent(room, player, message);
                 }
             }
         },
