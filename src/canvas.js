@@ -130,12 +130,22 @@ var Canvas = function() {
         this.ball.y = y;
     },
 
+    /**
+     * Sets the ball displacement at any time
+     */
+    this.setBallDisplacement = function (dx, dy) {
+
+        this.ball.dx = dx;
+        this.ball.dy = dy;
+    },
+
     /*
      * Sets the ball start point in the canvas
      */
     _setBallStartPosition = function () {
 
         that.setBallPosition(_canvasObj.width / 2, _canvasObj.height / 2);
+        that.setBallDisplacement(DEFAULT_DX, DEFAULT_DY);
     },
 
 
