@@ -28,6 +28,9 @@ var Canvas = function() {
         y : 0
     },
 
+    DEFAULT_DX = -8,
+    DEFAULT_DY = 16,
+
     /* Ball object */
     this.ball = {
         // Position
@@ -35,8 +38,8 @@ var Canvas = function() {
         y  : 0,
 
     // Displacement
-        dx : -8,
-        dy : 16,
+        dx : DEFAULT_DX,
+        dy : DEFAULT_DY,
     },
 
     // Paddles Dimensions
