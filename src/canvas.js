@@ -118,14 +118,21 @@ var Canvas = function() {
         canvasMaxX = canvasMinX + _canvasObj.width;
     }
 
+    /**
+     * Sets the ball position at any time
+     */
+    this.setBallPosition = function (x, y) {
+
+        this.ball.x = x;
+        this.ball.y = y;
+    },
 
     /*
      * Sets the ball start point in the canvas
      */
     _setBallStartPosition = function () {
 
-        that.ball.x = _canvasObj.width / 2;
-        that.ball.y = _canvasObj.height / 2;
+        that.setBallPosition(_canvasObj.width / 2, _canvasObj.height / 2);
     },
 
 

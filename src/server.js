@@ -164,6 +164,19 @@ var Server = (function(){
         },
 
         /**
+         * Notifies opponent with message
+         */
+        notifyOpponent = function (room, player, message) {
+
+            var opponent = games[room].player2;
+            if(games[room].player2 == player) {
+                opponent = games[room].player1;
+            }
+
+            opponent.send(message);
+        },
+
+        /**
          * Sends positions of one player to another
          */
         sendPosition = function (message, player) {
@@ -172,13 +185,7 @@ var Server = (function(){
             if(games.hasOwnProperty(room)) {
 
                 if(roomHasPlayers(room)) {
-
-                    var opponent = games[room].player2;
-                    if(games[room].player2 == player) {
-                        opponent = games[room].player1;
-                    }
-
-                    opponent.send(message);
+                    notifyOpponent(room, player, message);
                 }
             }
         },

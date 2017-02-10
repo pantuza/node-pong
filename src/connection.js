@@ -92,8 +92,9 @@ var Connection = function(game) {
                         canvas.player1 = data.position;
                     }
 
-                    canvas.ball.x = parseInt((data.ball.x + canvas.ball.x) / 2, 10);
-                    canvas.ball.y = parseInt((data.ball.y + canvas.ball.y) / 2, 10);
+                    var x = parseInt((data.ball.x + canvas.ball.x) / 2, 10);
+                    var y = parseInt((data.ball.y + canvas.ball.y) / 2, 10);
+                    canvas.setBallPosition(x, y);
                     break;
                 default:
                     game.writeLog(data);
