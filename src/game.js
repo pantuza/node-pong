@@ -159,17 +159,23 @@ var Game = function(canvas) {
      */
     isThereAWinner = function () {
 
+        var result = false;
+        var playerText = "Player 1";
+
         if(scores.p1.points >= MATCH_POINTS) {
+            result = true;
 
-            that.writeLog("Player 1 won the game!");
-            return true;
         } else if(scores.p2.points >= MATCH_POINTS) {
-
-            that.writeLog("Player 2 won the game!");
-            return true;
+            result = true;
+            playerText = "Player 2";
         }
 
-        return false;
+        if(result) {
+            that.writeLog(playerText + " won the game!");
+            h3.textContent = playerText + " wins!";
+        }
+
+        return result;
     };
 
     /*
