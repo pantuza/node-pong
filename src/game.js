@@ -120,7 +120,7 @@ var Game = function(canvas) {
             data = {
                 type: "SCORE",
                 me: me,
-        };
+			};
 
         if(that.playerID == player) {
             me = true;
