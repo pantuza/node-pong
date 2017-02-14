@@ -204,8 +204,6 @@ var Server = (function(){
                     if(games[room].player2 == player) {
                         opponent = games[room].player1;
                     }
-                    console.log("me: " + player.id);
-                    console.log("opponent: " + opponent.id);
 
                     var transaction = games[room].scoreTransaction;
                     if(transaction.onGoing) {
