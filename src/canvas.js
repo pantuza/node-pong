@@ -214,7 +214,6 @@ var Canvas = function() {
 
         // If the ball is going to pass the game area by right side
         if (ballNextPos + this.paddle_w + 5 > WIDTH) {
-            console.log("ball: "+ (ballNextPos + this.paddle_w + 5) + " > " + WIDTH);
 
             // Inverts the ball displacement on abscissas
             // if the ball collided with the paddle
@@ -222,7 +221,7 @@ var Canvas = function() {
                 this.ball.dx = -this.ball.dx;
 
             } else {
-                game.score('p2');
+                game.score('p1');
             }
 
         // If the next moviment of the ball is smaller than game area by left
@@ -233,7 +232,7 @@ var Canvas = function() {
                 this.ball.dx = -this.ball.dx;
 
             } else {
-                game.score('p1');
+                game.score('p2');
             }
         }
 
